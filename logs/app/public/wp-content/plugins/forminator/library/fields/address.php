@@ -187,7 +187,7 @@ class Forminator_Address extends Forminator_Field {
 			'type'          => 'text',
 			'name'          => $address_id,
 			'placeholder'   => $this->sanitize_value( self::get_property( $slug . '_placeholder', $field ) ),
-			'id'            => 'forminator-field-' . $address_id . '_' . Forminator_CForm_Front::$uid,
+			'id'            => self::get_field_id( $address_id ),
 			'class'         => 'forminator-input',
 			'data-required' => $required,
 			'aria-required' => $ariareq,
@@ -277,7 +277,7 @@ class Forminator_Address extends Forminator_Field {
 					'type'          => 'text',
 					'name'          => $city_id,
 					'placeholder'   => $this->sanitize_value( self::get_property( 'address_city_placeholder', $field ) ),
-					'id'            => 'forminator-field-' . $city_id . '_' . Forminator_CForm_Front::$uid,
+					'id'            => self::get_field_id( $city_id ),
 					'class'         => 'forminator-input',
 					'data-required' => $city_required,
 					'aria-required' => $city_ariareq,
@@ -317,7 +317,7 @@ class Forminator_Address extends Forminator_Field {
 					'type'          => 'text',
 					'name'          => $state_id,
 					'placeholder'   => $this->sanitize_value( self::get_property( 'address_state_placeholder', $field ) ),
-					'id'            => 'forminator-field-' . $state_id . '_' . Forminator_CForm_Front::$uid,
+					'id'            => self::get_field_id( $state_id ),
 					'class'         => 'forminator-input',
 					'data-required' => $state_required,
 					'aria-required' => $state_ariareq,
@@ -405,7 +405,7 @@ class Forminator_Address extends Forminator_Field {
 					'type'        => 'text',
 					'name'        => $zip_id,
 					'placeholder' => $this->sanitize_value( self::get_property( 'address_zip_placeholder', $field ) ),
-					'id'          => 'forminator-field-' . $zip_id . '_' . Forminator_CForm_Front::$uid,
+					'id'          => self::get_field_id( $zip_id ),
 					'class'       => 'forminator-input',
 				);
 
@@ -441,7 +441,7 @@ class Forminator_Address extends Forminator_Field {
 
 				$country_data = array(
 					'name'             => $country_id,
-					'id'               => 'forminator-form-' . $this->form_settings['form_id'] . '__field--' . $country_id . '_' . Forminator_CForm_Front::$uid,
+					'id'               => self::get_field_id( $this->form_settings['form_id'] . '__field--' . $country_id ),
 					'class'            => 'forminator-select2',
 					'data-search'      => 'true',
 					'data-placeholder' => esc_html__( 'Select country', 'forminator' ),
@@ -553,14 +553,7 @@ class Forminator_Address extends Forminator_Field {
 			$value = self::get_post_data( $attr['name'] );
 		}
 
-		if ( $label ) {
-			$html .= sprintf(
-				'<label for="%s" class="forminator-label">%s %s</label>',
-				$get_id,
-				esc_html( $label ),
-				$required ? forminator_get_required_icon() : ''
-			);
-		}
+		$html .= self::get_field_label( $label, $get_id, $required );
 
 		$markup .= ' data-default-value="' . esc_attr( $value ) . '"';
 

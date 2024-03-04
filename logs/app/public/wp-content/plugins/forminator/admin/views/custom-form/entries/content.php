@@ -135,13 +135,17 @@ if ( $this->total_entries() > 0 ) :
 
 								echo '<td>';
 
-								echo esc_html( wp_strip_all_tags( $summary_item['value'] ) );
+								echo '<div class="forminator-submissions-column-content">';
+
+								echo '<div class="forminator-submissions-column-ellipsis">' . esc_html( wp_strip_all_tags( $summary_item['value'] ) ) . '</div>';
 
 								echo '<span class="sui-accordion-open-indicator">';
 
 								echo '<i class="sui-icon-chevron-down"></i>';
 
 								echo '</span>';
+
+								echo '</div>';
 
 								echo '</td>';
 

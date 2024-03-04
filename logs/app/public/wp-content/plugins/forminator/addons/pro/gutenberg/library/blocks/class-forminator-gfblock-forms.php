@@ -130,17 +130,17 @@ class Forminator_GFBlock_Forms extends Forminator_GFBlock_Abstract {
 		);
 
 		wp_enqueue_script( 'jquery-ui-datepicker' );
+		Forminator_Assets_Enqueue_Form::load_slider_scripts();
 		$style_src     = forminator_plugin_url() . 'assets/css/intlTelInput.min.css';
 		$style_version = '4.0.3';
 
 		$script_src     = forminator_plugin_url() . 'assets/js/library/intlTelInput.min.js';
-		$script_src_cleave     = forminator_plugin_url() . 'assets/js/library/cleave.min.js';
-		$script_src_cleave_phone     = forminator_plugin_url() . 'assets/js/library/cleave-phone.i18n.js';
+		$script_src_lib = forminator_plugin_url() . 'assets/js/library/libphonenumber.min.js';
 		$script_version = FORMINATOR_VERSION;
+
 		wp_enqueue_style( 'intlTelInput-forminator-css', $style_src, array(), $style_version ); // intlTelInput.
 		wp_enqueue_script( 'forminator-intlTelInput', $script_src, array( 'jquery' ), $script_version, false ); // intlTelInput.
-		wp_enqueue_script( 'forminator-cleave', $script_src_cleave, array( 'jquery' ), $script_version, false ); // intlTelInput.
-		wp_enqueue_script( 'forminator-cleave-phone', $script_src_cleave_phone, array( 'jquery' ), $script_version, false ); // intlTelInput.
+		wp_enqueue_script( 'forminator-libphonenumber', $script_src_lib, array( 'jquery' ), $script_version, false ); // libphonenumber.
 
 		wp_localize_script( 'forminator-front-scripts', 'ForminatorFront', forminator_localize_data() );
 	}

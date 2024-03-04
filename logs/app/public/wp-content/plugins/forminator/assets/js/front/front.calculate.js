@@ -143,7 +143,7 @@
 			var formula               = calcField.formula;
 			var joinedFieldTypes      = this.settings.forminatorFields.join('|');
 			var incrementFieldPattern = "(" + joinedFieldTypes + ")-\\d+";
-			var pattern               = new RegExp('\\{(' + incrementFieldPattern + ')(\\-[A-Za-z-_]+)?(\\-[A-Za-z0-9-_]+)?\\}', 'g');
+			var pattern               = new RegExp('\\{(' + incrementFieldPattern + '(?:-min|-max)?)(\\-[A-Za-z-_]+)?(\\-[A-Za-z0-9-_]+)?\\}', 'g');
 
 			formula = this.maybeReplaceCalculationGroups(formula);
 
@@ -302,7 +302,7 @@
 		},
 
 		maybeReplaceCalculationGroups: function (formula) {
-			var pattern = new RegExp('\\{((?:calculation|number|currency|radio|select|checkbox)-\\d+)-\\*\\}', 'g');
+			var pattern = new RegExp('\\{((?:calculation|number|slider|currency|radio|select|checkbox)-\\d+(?:-min|-max)?)-\\*\\}', 'g');
 			var matches;
 			while( matches = pattern.exec( formula ) ) {
 				var fullMatch = matches[0];
@@ -325,7 +325,7 @@
 
 			var joinedFieldTypes      = this.settings.forminatorFields.join('|');
 			var incrementFieldPattern = "(" + joinedFieldTypes + ")-\\d+";
-			var pattern               = new RegExp('\\{(' + incrementFieldPattern + ')(\\-[A-Za-z-_]+)?(\\-[A-Za-z0-9-_]+)?\\}', 'g');
+			var pattern               = new RegExp('\\{(' + incrementFieldPattern + '(?:-min|-max)?)(\\-[A-Za-z-_]+)?(\\-[A-Za-z0-9-_]+)?\\}', 'g');
 			var parsedFormula         = formula;
 
 			var matches;
@@ -532,7 +532,7 @@
 			var $error_holder = $field_holder.find('.forminator-error-message');
 			var $error_id = $element.attr('id') + '-error';
 			var $element_aria_describedby = $element.attr('aria-describedby');
-		  
+
 			if ($element_aria_describedby) {
 				var ids = $element_aria_describedby.split(' ');
 				ids = ids.filter(function (id) {

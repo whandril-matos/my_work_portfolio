@@ -1,5 +1,45 @@
 # Change Log
 
+## [1.12.10](https://github.com/wpmudev/forminator-ui/compare/v1.12.9...v1.12.10) (2024-01-12)
+
+#### 🚀 Improvement
+- `slider`
+  - new(slider): slider material design changed. [#63](https://github.com/wpmudev/forminator-ui/pull/63) ([FOR-4200](https://incsub.atlassian.net/browse/FOR-4200)) ([@creador-dev](https://github.com/creador-dev))
+
+#### Committers: 1
+- Pawan Kumar ([@creador-dev](https://github.com/creador-dev))
+
+## [1.12.9](https://github.com/wpmudev/forminator-ui/compare/v1.12.8...v1.12.9) (2024-01-05)
+
+#### 🐛 Bug Fix
+- `slider`
+  - new(slider): slider field init issue fix. [#62](https://github.com/wpmudev/forminator-ui/pull/62) ([FOR-4155](https://incsub.atlassian.net/browse/FOR-4155)) ([@creador-dev](https://github.com/creador-dev))
+
+#### Committers: 1
+- Pawan Kumar ([@creador-dev](https://github.com/creador-dev))
+
+## [1.12.8](https://github.com/wpmudev/forminator-ui/compare/v1.12.7...v1.12.8) (2023-12-22)
+
+#### ✨ New Features
+- `slider`
+  - Add slider component for forminator. [#61](https://github.com/wpmudev/forminator-ui/pull/61) ([FOR-4002](https://incsub.atlassian.net/browse/FOR-4002)) ([@creador-dev](https://github.com/creador-dev))
+
+#### Committers: 1
+- Pawan Kumar ([@creador-dev](https://github.com/creador-dev))
+
+## [1.12.7](https://github.com/wpmudev/forminator-ui/compare/v1.12.6...v1.12.7) (2023-07-20)
+
+#### 🚀 Improvement
+- `global`
+  - new(global): updated forminator ui from lib sass to dart sass. [#59](https://github.com/wpmudev/forminator-ui/pull/59) ([FOR-3553](https://incsub.atlassian.net/browse/FOR-3553)) ([@creador-dev](https://github.com/creador-dev))
+
+#### 🐛 Bug Fix
+- `global`
+  - fix(global): building FUI we have unnecessary repeated code. [#60](https://github.com/wpmudev/forminator-ui/pull/60) ([FOR-3707](https://incsub.atlassian.net/browse/FOR-3707)) ([@creador-dev](https://github.com/creador-dev))
+
+#### Committers: 1
+- Pawan Kumar ([@creador-dev](https://github.com/creador-dev))
+
 ## [1.12.6](https://github.com/wpmudev/forminator-ui/compare/v1.12.5...v1.12.6) (2023-05-17)
 
 #### 🐛 Bug Fix

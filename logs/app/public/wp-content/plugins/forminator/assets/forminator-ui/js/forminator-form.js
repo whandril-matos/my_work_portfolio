@@ -3,7 +3,12 @@
  * Copyright 2019 Incsub (https://incsub.com)
  * Licensed under GPL v3 (http://www.gnu.org/licenses/gpl-3.0.html)
  */
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : String(i); }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 (function ($) {
   // Enable strict mode.
   'use strict';
@@ -69,7 +74,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
     return this;
   };
 })(jQuery);
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 (function ($) {
   // Enable strict mode.
   'use strict';
@@ -115,7 +119,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
     return this;
   };
 })(jQuery);
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 (function ($) {
   // Enable strict mode.
   'use strict';
@@ -183,7 +186,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
     return this;
   };
 })(jQuery);
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 (function ($) {
   // Enable strict mode.
   'use strict';
@@ -236,7 +238,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
     return this;
   };
 })(jQuery);
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 (function ($) {
   // Enable strict mode.
   'use strict';
@@ -277,7 +278,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
     return this;
   };
 })(jQuery);
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 (function ($) {
   // Enable strict mode.
   'use strict';
@@ -309,7 +309,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
     return this;
   };
 })(jQuery);
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 (function ($) {
   // Enable strict mode.
   'use strict';
@@ -342,7 +341,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
     return this;
   };
 })(jQuery);
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 (function ($) {
   // Enable strict mode
   'use strict';
@@ -411,7 +409,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
     });
   };
 })(jQuery);
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 (function () {
   // Enable strict mode.
   'use strict';
@@ -739,3 +736,128 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
     topDialog.close();
   }; // end closeAuthentication.
 })();
+(function ($) {
+  // Enable strict mode
+  'use strict';
+
+  // Define global FUI object if it doesn't exist.
+  if ('object' !== _typeof(window.FUI)) {
+    window.FUI = {};
+  }
+  FUI.slider = function () {
+    $('.forminator-slider').each(function () {
+      // Cache the current slider element
+      var $element = $(this);
+      var $slide = $element.find('.forminator-slide');
+      var $input = $element.find('.forminator-hidden-input');
+      var $disabled = $element.hasClass('forminator-disabled');
+
+      // Check if it's a range slider
+      var $isRange = $slide.data('is-range');
+
+      // Parse integer values from data attributes with error handling
+      var $minRange = parseInt($slide.data('min')) || 0;
+      var $maxRange = parseInt($slide.data('max')) || 100;
+      var $value = parseInt($slide.data('value')) || $minRange;
+      var $valueMax = parseInt($slide.data('value-max')) || $maxRange;
+      var $step = parseInt($slide.data('step')) || 1;
+      var $sliderValueWrapper = $element.find('.forminator-slider-amount');
+
+      // Get the label associated with this slider
+      var $label = $('label[for="' + $input.attr('id') + '"]');
+
+      // Check if slider is already intialised.
+      if (true === $slide.data('init')) {
+        return;
+      }
+
+      // Initialize the slider with the parsed values
+      $slide.slider(_objectSpread(_objectSpread({
+        range: $isRange ? true : 'min',
+        min: $minRange,
+        max: $maxRange,
+        disabled: $disabled,
+        step: $step
+      }, $isRange ? {
+        values: [$value, $valueMax]
+      } : {
+        value: $value
+      }), {}, {
+        create: function create(event, ui) {
+          // Format the slider values using the template
+          var $formattedValue = valueTemplate($element, $value);
+          var $formattedValueMax = $isRange ? valueTemplate($element, $valueMax) : null;
+
+          // add data-attribute to check intialization.
+          $slide.data('init', true);
+          $sliderValueWrapper.find('.forminator-slider-hidden-min').val($value).change();
+          if ($isRange) {
+            $sliderValueWrapper.find('.forminator-slider-hidden-max').val($valueMax).change();
+          }
+
+          // Create the UI with the formatted values
+          updateSliderValues($element, $formattedValue, $formattedValueMax, $value, $valueMax);
+        },
+        slide: function slide(event, ui) {
+          // Format the slider values using the template
+          var $value = $isRange ? ui.values[0] : ui.value;
+          var $valueMax = $isRange ? ui.values[1] : null;
+          var $formattedValue = valueTemplate($element, $value);
+          var $formattedValueMax = $isRange ? valueTemplate($element, $valueMax) : null;
+
+          // Update the UI with the formatted values
+          updateSliderValues($element, $formattedValue, $formattedValueMax, $value, $valueMax);
+        },
+        stop: function stop(event, ui) {
+          // Format the slider values using the template
+          var $value = $isRange ? ui.values[0] : ui.value;
+          var $valueMax = $isRange ? ui.values[1] : null;
+          if (ui.handle === $element.find('.ui-slider-handle')[0]) {
+            $sliderValueWrapper.find('.forminator-slider-hidden-min').val($value).change();
+          } else if (ui.handle === $element.find('.ui-slider-handle')[1]) {
+            $sliderValueWrapper.find('.forminator-slider-hidden-max').val($valueMax).change();
+          } else {
+            $sliderValueWrapper.find('.forminator-slider-hidden-min').val($value).change();
+          }
+        }
+      }));
+
+      // Add a click event listener to the label
+      $label.on('click', function () {
+        var $handles = $slide.find('.ui-slider-handle');
+        if ($disabled) {
+          return;
+        }
+        if ($isRange && 1 < $handles.length) {
+          $($handles[0]).focus(); // Focus on the first handle for range sliders
+        } else {
+          $handles.focus(); // Focus on the handle for single sliders
+        }
+      });
+    });
+
+    // Function to format the slider value using the template
+    function valueTemplate($element, $sliderValue) {
+      var $sliderValueWrapper = $element.find('.forminator-slider-amount');
+      var $sliderValueTemplate = $sliderValueWrapper.data('value-template') || '{slider-value}';
+      return $sliderValueTemplate.replace('{slider-value}', '<span class="forminator-slider-value">' + $('<div>').text($sliderValue).html() + '</span>');
+    }
+
+    // Function to update the UI with the formatted values
+    function updateSliderValues($element, $formattedValue, $formattedValueMax, $value, $valueMax) {
+      var $sliderValueWrapper = $element.find('.forminator-slider-amount');
+      var $slide = $element.find('.forminator-slide');
+      var $isRange = $slide.data('is-range');
+      $sliderValueWrapper.find('.forminator-slider-value-min').html($formattedValue);
+      if ($isRange) {
+        if ($value === $valueMax) {
+          $sliderValueWrapper.find('.forminator-slider-separator').hide();
+          $sliderValueWrapper.find('.forminator-slider-value-max').html('');
+        } else {
+          $sliderValueWrapper.find('.forminator-slider-separator').show();
+          $sliderValueWrapper.find('.forminator-slider-value-max').html($formattedValueMax);
+        }
+      }
+    }
+  };
+})(jQuery);

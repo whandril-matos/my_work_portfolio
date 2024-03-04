@@ -319,9 +319,8 @@ class Forminator_CForm_View_Page extends Forminator_Admin_View_Page {
 			$mapper['rich'] = isset( $field_array['editor-type'] ) ? $field_array['editor-type'] : false;
 		} elseif ( 'number' === $field_type || 'currency' === $field_type || 'calculation' === $field_type ) {
 			$field_array = $field->to_array();
-			$decimal     = 'calculation' === $field_type ? 2 : 0;
 			$separator   = Forminator_Field::get_property( 'separators', $field_array, 'blank' );
-			$precision   = Forminator_Field::get_property( 'precision', $field_array, $decimal );
+			$precision   = Forminator_Field::get_calculable_precision( $field_array );
 			$separators  = Forminator_Field::forminator_separators( $separator, $field_array );
 
 			$mapper['separator'] = $separators['separator'];

@@ -426,8 +426,7 @@ class Forminator_CForm_Front extends Forminator_Render_Form {
 			$style_version = '4.0.3';
 
 			$script_src     = forminator_plugin_url() . 'assets/js/library/intlTelInput.min.js';
-			$script_src_cleave     = forminator_plugin_url() . 'assets/js/library/cleave.min.js';
-			$script_src_cleave_phone     = forminator_plugin_url() . 'assets/js/library/cleave-phone.i18n.js';
+			$script_src_lib = forminator_plugin_url() . 'assets/js/library/libphonenumber.min.js';
 			$script_version = FORMINATOR_VERSION;
 
 			if ( $is_ajax_load ) {
@@ -438,15 +437,10 @@ class Forminator_CForm_Front extends Forminator_Render_Form {
 					'on'   => '$',
 					'load' => 'intlTelInput',
 				);
-				$this->scripts['forminator-cleave']    = array(
-					'src'  => add_query_arg( 'ver', $script_version, $script_src_cleave ),
+				$this->scripts['forminator-libphonenumber']    = array(
+					'src'  => add_query_arg( 'ver', $script_version, $script_src_lib ),
 					'on'   => '$',
-					'load' => 'cleave',
-				);
-				$this->scripts['forminator-cleave-phone']    = array(
-					'src'  => add_query_arg( 'ver', $script_version, $script_src_cleave_phone ),
-					'on'   => '$',
-					'load' => 'cleave-phone',
+					'load' => 'libphonenumber',
 				);
 			}
 		}
@@ -516,6 +510,8 @@ class Forminator_CForm_Front extends Forminator_Render_Form {
 				'load' => 'inputmask-binding',
 			);
 		}
+
+		$this->maybe_load_slider_styles( $is_ajax_load );
 
 		// todo: solve this.
 		// load buttons css.
@@ -588,6 +584,29 @@ class Forminator_CForm_Front extends Forminator_Render_Form {
 			add_action( 'wp_footer', array( $this, 'forminator_render_front_scripts' ), 9999 );
 		}
 		add_action( 'admin_footer', array( $this, 'forminator_render_front_scripts' ), 9999 );
+	}
+
+	/**
+	 * Load styles for slider fields for None design style.
+	 *
+	 * @param bool $is_ajax_load Is it loading via AJAX.
+	 **/
+	private function maybe_load_slider_styles( bool $is_ajax_load ) : void {
+		if ( ! $this->has_field_type( 'slider' ) || 'none' !== $this->get_form_design() ) {
+			return;
+		}
+		$src     = apply_filters( 'forminator_none_design_slider_css', 'https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.min.css' );
+		$version = apply_filters( 'forminator_none_design_slider_css_version', '1' );
+		if ( ! $src ) {
+			return;
+		}
+
+		if ( ! $is_ajax_load ) {
+			wp_enqueue_style( 'forminator-none-design-slider', $src, array(), $version );
+		} else {
+			// load later via ajax to avoid cache.
+			$this->styles['forminator-none-design-slider'] = array( 'src' => add_query_arg( 'ver', $version, $src ) );
+		}
 	}
 
 	/**

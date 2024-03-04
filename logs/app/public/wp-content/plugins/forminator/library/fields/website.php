@@ -114,7 +114,7 @@ class Forminator_Website extends Forminator_Field {
 		$id          = self::get_property( 'element_id', $field );
 		$name        = $id;
 		$ariaid      = $id;
-		$id          = 'forminator-field-' . $id . '_' . Forminator_CForm_Front::$uid;
+		$id          = self::get_field_id( $id );
 		$required    = $this->get_property( 'required', $field, false );
 		$ariareq     = 'false';
 		$placeholder = $this->sanitize_value( $this->get_property( 'placeholder', $field ) );

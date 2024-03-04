@@ -110,7 +110,7 @@ class Forminator_Form_Entry_Model {
 		 * draft_id could be used in place of the entry_id in the argument
 		 * but we still need to get the entry_id which is used as the key for object cache
 		*/
-		if ( ! is_numeric( $entry_id ) && ctype_alnum( $entry_id ) ) {
+		if ( ! is_numeric( $entry_id ) && is_string( $entry_id ) && ctype_alnum( $entry_id ) ) {
 			$entry_id = $this->get_entry_id_by_draft_id( $entry_id );
 		}
 
@@ -392,6 +392,8 @@ class Forminator_Form_Entry_Model {
 		return apply_filters(
 			'forminator_field_suffix',
 			array(
+				'min',
+				'max',
 				'hours',
 				'minutes',
 				'ampm',
@@ -1409,14 +1411,14 @@ class Forminator_Form_Entry_Model {
 
 							$upload_count ++;
 							if ( $upload_count > 1 ) {
-								$string_value .= ', ';
+								$string_value .= '<br/>';
 							}
 
 							$string_value .= '<a href="' . $url . '" rel="noopener noreferrer" target="_blank" title="' . esc_html__( 'View File', 'forminator' ) . '">' . $file_name . '</a>';
 						}
 					} else {
 						// truncate url.
-						$string_value = is_array( $file['file_url'] ) ? implode( '<br/>', $file['file_url'] ) : $file['file_url'];
+						$string_value = is_array( $file['file_url'] ) ? implode( ', ', $file['file_url'] ) : $file['file_url'];
 						if ( strlen( $string_value ) > $truncate ) {
 							$string_value = substr( $string_value, 0, $truncate ) . '...';
 						}
@@ -1497,6 +1499,12 @@ class Forminator_Form_Entry_Model {
 				// Hide value for login/template forms.
 				$string_value = '*****';
 				break;
+			case 'slider':
+				// Change behavior for range slider.
+				if ( is_array( $meta_value ) && isset( $meta_value['min'] ) && isset( $meta_value['max'] ) ) {
+					$string_value = $meta_value['min'] . ' - ' . $meta_value['max'];
+					break;
+				}
 			default:
 				// base flattener.
 				// implode on array.
@@ -2648,21 +2656,77 @@ class Forminator_Form_Entry_Model {
 	}
 
 	/**
+	 * Is option limit reached
+	 *
+	 * @param int    $module_id - Module ID.
+	 * @param string $field_name - Field name.
+	 * @param string $field_type - Field type.
+	 * @param array  $option Option settings.
+	 * @param bool   $freeze Optional. Should it save transient option for the current request or not. False by default.
+	 * @return bool
+	 */
+	public static function is_option_limit_reached( $module_id, $field_name, $field_type, $option, $freeze = false ) {
+		if ( empty( $option['limit'] ) ) {
+			return false;
+		}
+		$entries = self::select_count_entries_by_meta_field( $module_id, $field_name, $option['value'], $option['label'], $field_type );
+		if ( $option['limit'] <= $entries ) {
+			return true;
+		}
+
+		if ( $freeze ) {
+			/**
+			 * Filter the time interval (in seconds) after which transient option for limited Select Option for submissions in process will be expired.
+			 *
+			 * @param int    $seconds Second amount. 10 by default.
+			 * @param string $module_id Module ID.
+			 */
+			$expiration = apply_filters( 'forminator_form_select_option_limit_interval', 10, $module_id );
+
+			do {
+				$transient_key = 'forminator_select_option_limit_in_process' . $module_id . $field_name . $option['value'] . '_' . $entries;
+				$is_set        = set_transient( $transient_key, 1, $expiration );
+			} while ( ! $is_set && $entries++ );
+
+			add_filter(
+				'forminator_submission_success',
+				function ( $response ) use ( $transient_key ) {
+					delete_transient( $transient_key );
+					return $response;
+				}
+			);
+			add_filter(
+				'forminator_submission_error',
+				function ( $response ) use ( $transient_key ) {
+					delete_transient( $transient_key );
+					return $response;
+				}
+			);
+
+			if ( $option['limit'] <= $entries ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Count entries of form select key and value
 	 *
 	 * @param int $form_id - the form id.
 	 * @param string $field_name - the field name.
 	 * @param string $field_value - the field value.
-	 * @param string $type - type.
+	 * @param string $option_type - Option type (multiselect|single).
 	 *
 	 * @return int - total entries
 	 * @since 1.7
 	 *
 	 */
-	public static function select_count_entries_by_meta_field( $form_id, $field_name, $field_value, $field_label, $type = 'select' ) {
+	public static function select_count_entries_by_meta_field( $form_id, $field_name, $field_value, $field_label, $option_type = 'single' ) {
 		global $wpdb;
 
-		if ( 'select' === $type ) {
+		if ( 'single' === $option_type ) {
 			$condition = $wpdb->prepare( " AND ( m.`meta_value` = '%s' OR m.`meta_value` = '%s' )", esc_sql( $field_value ), esc_sql( $field_label ) );
 		} else {
 			// todo: change this condition to check if it's multiple one - do this, otherwise do the previous code block.
@@ -2684,11 +2748,11 @@ class Forminator_Form_Entry_Model {
 								AND e.`is_spam` = 0";
 		$entries          = $wpdb->get_var( $wpdb->prepare( $sql, $form_id, esc_sql( $field_name ) ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
-		if ( $entries ) {
-			return $entries;
+		if ( ! $entries || is_wp_error( $entries ) ) {
+			$entries = 0;
 		}
 
-		return 0;
+		return (int) $entries;
 	}
 
 	/**

@@ -296,6 +296,9 @@ function forminator_get_allowed_field_types_for_addon() {
 		'name-middle-name',
 		'name-last-name',
 		'number',
+		'slider',
+		'slider-min',
+		'slider-max',
 		'phone',
 		'postdata-post-title',
 		'postdata-post-content',
@@ -409,6 +412,7 @@ function forminator_addon_flatten_mutiple_field( $field_array ) {
 		'name',
 		'postdata',
 		'address',
+		'slider',
 	);
 
 	if ( ! in_array( $field_array['type'], $multiple_field_types, true ) ) {
@@ -482,6 +486,22 @@ function forminator_addon_flatten_mutiple_field( $field_array ) {
 
 			return $multi_fields;
 		}
+	} elseif ( 'slider' === $field_array['type'] ) {
+		if ( 'range' !== $field_array['slider_type'] ) {
+			return false;
+		}
+		return array(
+			array(
+				'type'        => $field_array['type'] . '-min',
+				'element_id'  => $field_array['element_id'] . '-min',
+				'field_label' => $field_array['field_label'] . ' - min',
+			),
+			array(
+				'type'        => $field_array['type'] . '-max',
+				'element_id'  => $field_array['element_id'] . '-max',
+				'field_label' => $field_array['field_label'] . ' - max',
+			),
+		);
 	} elseif ( 'postdata' === $field_array['type'] ) {
 		// flatten POSTDATA.
 		$title_enabled   = isset( $field_array['post_title'] ) && ! empty( $field_array['post_title'] ) ? true : false;
@@ -1020,7 +1040,7 @@ function forminator_addon_maybe_log() {
  * @return mixed|string
  */
 function forminator_addon_replace_custom_vars( $content, $submitted_data, Forminator_Form_Model $custom_form, $entry_meta, $allow_html = false, $entry = null ) {
-	$entry_model = new Forminator_Form_Entry_Model( null );
+	$entry_model = new Forminator_Form_Entry_Model();
 	foreach ( $entry_meta as $meta ) {
 		if ( isset( $meta['name'] ) ) {
 			$entry_model->meta_data[ $meta['name'] ] = array(

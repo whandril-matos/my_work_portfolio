@@ -122,7 +122,7 @@ class Forminator_Text extends Forminator_Field {
 		$id          = self::get_property( 'element_id', $field );
 		$name        = $id;
 		$ariaid      = $id;
-		$id          = 'forminator-field-' . $id . '_' . Forminator_CForm_Front::$uid;
+		$id          = self::get_field_id( $id );
 		$required    = self::get_property( 'required', $field, false );
 		$ariareq     = 'false';
 		$default     = esc_html( self::get_property( 'default', $field, false ) );

@@ -130,7 +130,7 @@ class Forminator_Currency extends Forminator_Field {
 		$max         = '';
 		$id          = self::get_property( 'element_id', $field );
 		$name        = $id;
-		$id          = 'forminator-field-' . $id . '_' . Forminator_CForm_Front::$uid;
+		$id          = self::get_field_id( $id );
 		$required    = self::get_property( 'required', $field, false );
 		$placeholder = $this->sanitize_value( self::get_property( 'placeholder', $field ) );
 		$value       = esc_html( self::get_post_data( $name, self::get_property( 'default_value', $field ) ) );
@@ -140,7 +140,7 @@ class Forminator_Currency extends Forminator_Field {
 		$min         = esc_html( self::get_property( 'limit_min', $field, false ) );
 		$max         = esc_html( self::get_property( 'limit_max', $field, false ) );
 		$currency    = self::get_property( 'currency', $field, 'USD' );
-		$precision   = self::get_property( 'precision', $field, 2 );
+		$precision   = self::get_calculable_precision( $field );
 		$separator   = self::get_property( 'separators', $field, 'blank' );
 		$separators  = $this->forminator_separators( $separator, $field );
 
@@ -301,7 +301,7 @@ class Forminator_Currency extends Forminator_Field {
 		$max            = self::get_property( 'limit_max', $field, $data );
 		$min            = self::get_property( 'limit_min', $field, $data );
 		$custom_message = self::get_property( 'limit_message', $field, false, 'bool' );
-		$precision      = self::get_property( 'precision', $field, 2 );
+		$precision      = self::get_calculable_precision( $field );
 		$separator      = self::get_property( 'separators', $field, 'blank' );
 		$max            = trim( $max );
 		$min            = trim( $min );

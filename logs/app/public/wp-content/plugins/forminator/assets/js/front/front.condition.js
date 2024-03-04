@@ -65,8 +65,12 @@
 				var $element = $(this),
 					element_id = $element.closest('.forminator-col').attr('id')
 					;
+				if ( $element.is( 'input[type="radio"]' ) && 'input' === e.type ) {
+					// Skip input events for radio buttons, handle only change events for them.
+					return;
+				}
 
-				if (typeof element_id === 'undefined') {
+				if (typeof element_id === 'undefined' || 0 === element_id.indexOf( 'slider-' ) ) {
                     /*
                      * data-multi attribute was added to Name field - multiple
                      * We had to use name attribute for Name multi-field because we cannot change
@@ -270,7 +274,7 @@
 		get_relations: function (element_id) {
 			if (!this.has_relations(element_id)) return [];
 
-			return this.settings.relations[element_id];
+			return $.unique( this.settings.relations[element_id] );
 		},
 
 		get_field_value: function (element_id) {

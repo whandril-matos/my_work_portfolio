@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Forminator
- * Version: 1.28.1
+ * Version: 1.29.0
  * Plugin URI:  https://wpmudev.com/project/forminator/
  * Description: Capture user information (as detailed as you like), engage users with interactive polls that show real-time results and graphs, “no wrong answer” Facebook-style quizzes and knowledge tests.
  * Author: WPMU DEV
@@ -556,5 +556,23 @@ if ( file_exists( forminator_plugin_dir() . 'library/external/src/Forminator/woo
 			require_once forminator_plugin_dir() . 'library/external/src/Forminator/woocommerce/action-scheduler/action-scheduler.php';
 		},
 		-10 // Don't change.
+	);
+
+	// Re-register Action Scheduler tables if `priority` column is missing in actionscheduler_actions table.
+	add_action(
+		'action_scheduler_pre_init',
+		function() {
+			$key = 'forminator_action_scheduler_db_updated';
+			if ( ! get_option( $key ) && class_exists( 'ActionScheduler_StoreSchema' ) ) {
+				global $wpdb;
+				$table = $wpdb->prefix . ActionScheduler_StoreSchema::ACTIONS_TABLE;
+				$res   = $wpdb->get_var( "SHOW COLUMNS FROM {$table} LIKE 'priority'" );
+				if ( ! $res ) {
+					$store_schema = new ActionScheduler_StoreSchema();
+					$store_schema->register_tables( true );
+				}
+				update_option( $key, '1' );
+			}
+		}
 	);
 }

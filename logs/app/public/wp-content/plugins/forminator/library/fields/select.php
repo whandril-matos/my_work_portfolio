@@ -127,7 +127,8 @@ class Forminator_Select extends Forminator_Field {
 		$id            = self::get_property( 'element_id', $field );
 		$name          = $id;
 		$uniq_id       = Forminator_CForm_Front::$uid;
-		$id            = 'forminator-form-' . $settings['form_id'] . '__field--' . $id . '_' . $uniq_id;
+		$form_id       = $settings['form_id'];
+		$id            = 'forminator-form-' . $form_id . '__field--' . $id . '_' . $uniq_id;
 		$required      = self::get_property( 'required', $field, false, 'bool' );
 		$options       = self::get_options( $field );
 		$post_value    = self::get_post_data( $name, false );
@@ -144,24 +145,7 @@ class Forminator_Select extends Forminator_Field {
 
 		$html .= '<div class="forminator-field">';
 
-		if ( $label ) {
-			if ( $required ) {
-				$html .= sprintf(
-					'<label for="%s" id="%s" class="forminator-label">%s %s</label>',
-					$id,
-					$id . '-label',
-					esc_html( $label ),
-					forminator_get_required_icon()
-				);
-			} else {
-				$html .= sprintf(
-					'<label for="%s" id="%s" class="forminator-label">%s</label>',
-					$id,
-					$id . '-label',
-					esc_html( $label )
-				);
-			}
-		}
+		$html .= self::get_field_label( $label, $id, $required );
 
 		if ( $required && empty( $placeholder ) ) {
 			$placeholder = esc_html__( 'Please select an option', 'forminator' );
@@ -184,7 +168,6 @@ class Forminator_Select extends Forminator_Field {
 				esc_attr( $id . '-description' )
 			);
 
-			$option_first_key = '';
 			// Multi values.
 			$default_arr 	  = array();
 			$default     	  = '';
@@ -217,28 +200,14 @@ class Forminator_Select extends Forminator_Field {
 			foreach ( $options as $key => $option ) {
 
 				$value             = $option['value'] ? esc_html( strip_tags( $option['value'] ) ) : wp_kses_post( strip_tags( $option['label'] ) );
-				$label             = $option['label'] ? wp_kses_post( strip_tags( $option['label'] ) ) : '';
-				$limit             = ( isset( $option['limit'] ) && $option['limit'] ) ? esc_html( $option['limit'] ) : '';
 				$input_id          = $id . '-' . $i;
 				$option_default    = isset( $option['default'] ) ? filter_var( $option['default'], FILTER_VALIDATE_BOOLEAN ) : false;
 				$calculation_value = $calc_enabled && isset( $option['calculation'] ) ? $option['calculation'] : 0.0;
 				$selected 		   = false;
-				if ( 0 === $key ) {
-					$option_first_key = $value;
-				}
 
-				if ( isset( $is_limit ) && 'enable' === $is_limit && ! empty( $limit ) ) {
-					$entries = Forminator_Form_Entry_Model::select_count_entries_by_meta_field(
-						$settings['form_id'],
-						$field_name,
-						$value,
-						$label,
-						$field_type
-					);
-
-					if ( $limit <= $entries ) {
-						continue;
-					}
+				if ( isset( $is_limit ) && 'enable' === $is_limit
+					&& Forminator_Form_Entry_Model::is_option_limit_reached( $form_id, $field_name, $field_type, $option ) ) {
+					continue;
 				}
 
 				if ( self::FIELD_PROPERTY_VALUE_NOT_EXIST !== $post_value ) {
@@ -348,24 +317,13 @@ class Forminator_Select extends Forminator_Field {
 
 			foreach ( $options as $key => $option ) {
 				$value             = ( $option['value'] || is_numeric( $option['value'] ) ? esc_html( strip_tags( $option['value'] ) ) : '' );
-				$label             = $option['label'] ? wp_kses_post( strip_tags( $option['label'] ) ) : '';
-				$limit             = ( isset( $option['limit'] ) && $option['limit'] ) ? esc_html( $option['limit'] ) : '';
 				$option_default    = isset( $option['default'] ) ? filter_var( $option['default'], FILTER_VALIDATE_BOOLEAN ) : false;
 				$calculation_value = $calc_enabled && isset( $option['calculation'] ) ? esc_html( $option['calculation'] ) : 0.0;
 				$option_selected   = false;
 
-				if ( isset( $is_limit ) && 'enable' === $is_limit && ! empty( $limit ) ) {
-
-					$entries = Forminator_Form_Entry_Model::select_count_entries_by_meta_field(
-						$settings['form_id'],
-						$name,
-						$value,
-						$label
-					);
-
-					if ( $limit <= $entries ) {
-						continue;
-					}
+				if ( isset( $is_limit ) && 'enable' === $is_limit
+						&& Forminator_Form_Entry_Model::is_option_limit_reached( $form_id, $name, $field_type, $option ) ) {
+					continue;
 				}
 
 				if ( $option_default && ! $draft_valid && ! $prefil_valid && ! $post_valid ) {
@@ -482,6 +440,37 @@ class Forminator_Select extends Forminator_Field {
 	}
 
 	/**
+	 * Are submitted options reached limit
+	 *
+	 * @param array $field Field settings.
+	 * @param array $selected_options Submitted select options.
+	 * @return bool
+	 */
+	private static function options_reached_limit( $field, $selected_options ) {
+		$is_limit = self::get_property( 'limit_status', $field );
+		// Skip if this field is not limitted.
+		if ( ! isset( $is_limit ) || 'enable' !== $is_limit ) {
+			return false;
+		}
+
+		$field_name = self::get_property( 'element_id', $field );
+		$field_type = self::get_property( 'value_type', $field );
+		$form_id    = Forminator_CForm_Front_Action::$module_id;
+
+		foreach ( $field['options'] as $option ) {
+			// Ski if this option was not selected.
+			if ( ! in_array( $option['value'], $selected_options, true ) ) {
+				continue;
+			}
+			if ( Forminator_Form_Entry_Model::is_option_limit_reached( $form_id, $field_name, $field_type, $option, true ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Field back-end validation
 	 *
 	 * @since 1.0
@@ -509,6 +498,17 @@ class Forminator_Select extends Forminator_Field {
 			$this->validation_message[ $id ] = apply_filters(
 				'forminator_select_field_nonexistent_validation_message',
 				esc_html__( 'Selected value does not exist.', 'forminator' ),
+				$id,
+				$field
+			);
+		}
+
+		// Check if select options is reached limit.
+		$value_limited = self::options_reached_limit( $field, (array) $data );
+		if ( $value_limited ) {
+			$this->validation_message[ $id ] = apply_filters(
+				'forminator_select_field_nonavailable_validation_message',
+				esc_html__( 'The selected option is no longer available.', 'forminator' ),
 				$id,
 				$field
 			);

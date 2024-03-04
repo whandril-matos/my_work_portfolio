@@ -358,7 +358,7 @@ class Forminator_Postdata extends Forminator_Field {
 		$html          = '';
 		$field_enabled = self::get_property( $field_name, $field, '' );
 		$type          = trim( $type );
-		$full_id       = 'forminator-field-' . $input_suffix . '-' . $id . '_' . Forminator_CForm_Front::$uid;
+		$full_id       = self::get_field_id( $input_suffix . '-' . $id );
 		$is_preview    = filter_input( INPUT_POST, 'is_preview', FILTER_VALIDATE_BOOLEAN );
 		$draft_value   = isset( $this->draft_values[ $input_suffix ] ) ? $this->draft_values[ $input_suffix ] : '';
 
@@ -447,22 +447,7 @@ class Forminator_Postdata extends Forminator_Field {
 					$required
 				);
 			} elseif ( 'multiselect' === $type ) {
-				if ( $label ) {
-					if ( $required ) {
-						$html .= sprintf(
-							'<label for="%s" class="forminator-label">%s %s</label>',
-							$id . '-field',
-							$label,
-							forminator_get_required_icon()
-						);
-					} else {
-						$html .= sprintf(
-							'<label for="%s" class="forminator-label">%s</label>',
-							$id . '-field',
-							$label
-						);
-					}
-				}
+				$html .= self::get_field_label( $label, $id . '-field', $required );
 
 				if ( ! empty( $draft_value ) ) {
 					// Users might switch from single select
@@ -522,21 +507,8 @@ class Forminator_Postdata extends Forminator_Field {
 			} elseif ( 'file' === $type ) {
 
 				$label_id = $full_id;
-				if ( $required ) {
-					$html .= sprintf(
-						'<label for="%s" class="forminator-label">%s %s</label>',
-						$label_id,
-						$label,
-						forminator_get_required_icon()
-					);
-				} else {
 
-					$html .= sprintf(
-						'<label for="%s" class="forminator-label">%s</label>',
-						$label_id,
-						$label
-					);
-				}
+				$html .= self::get_field_label( $label, $label_id, $required );
 
 				$html .= self::create_file_upload(
 					$input_suffix . '-' . $id . '_' . Forminator_CForm_Front::$uid,
@@ -821,15 +793,8 @@ class Forminator_Postdata extends Forminator_Field {
 
 				// Create the attachment.
 				$attachment_id = wp_insert_attachment( $attachment, $file );
+				self::generate_upload_metadata( $attachment_id, $file );
 
-				// Include image.php.
-				require_once ABSPATH . 'wp-admin/includes/image.php';
-
-				// Define attachment metadata.
-				$attach_data = wp_generate_attachment_metadata( $attachment_id, $file );
-
-				// Assign metadata to attachment.
-				wp_update_attachment_metadata( $attachment_id, $attach_data );
 				$uploaded_file = wp_get_attachment_image_src( $attachment_id, 'large', false );
 				if ( $uploaded_file && is_array( $uploaded_file ) ) {
 					return array(

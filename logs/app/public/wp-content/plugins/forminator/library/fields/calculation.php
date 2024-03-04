@@ -129,7 +129,10 @@ class Forminator_Calculation extends Forminator_Field {
 			}
 			$form_id = isset( $this->form_settings['form_id'] ) ? $this->form_settings['form_id'] : 0;
 			if ( ! empty( $form_id ) ) {
-				if ( false !== strpos( $field_id, 'number-' ) || false !== strpos( $field_id, 'currency-' ) ) {
+				if ( false !== strpos( $field_id, 'number-' )
+					|| false !== strpos( $field_id, 'currency-' )
+					|| false !== strpos( $field_id, 'slider-' )
+				) {
 					$field_form		= Forminator_Form_Model::model()->load( $form_id );
 					$formula_field 	= $field_form->get_field( $field_id, true );
 					$calc_enabled 	= self::get_property( 'calculations', $formula_field, true, 'bool' );

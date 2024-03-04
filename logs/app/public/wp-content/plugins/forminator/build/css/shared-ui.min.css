@@ -18717,6 +18717,7 @@ html.sui-has-overlay {
   border-radius: 4px;
   background-color: #fff;
   list-style: none;
+  text-align: left;
 }
 
 .sui-2-12-23 .sui-wrap .sui-form-field .sui-editor .sui-editor-options ul:before {
@@ -19125,7 +19126,7 @@ html.sui-has-overlay {
 }
 
 .sui-2-12-23 .sui-wrap .sui-select.sui-select-dropdown-container--open .sui-select-dropdown .select2-results .select2-results__options.select2-results__options--nested {
-  overflow: visible;
+  max-height: 100%;
 }
 
 .sui-2-12-23 .sui-wrap .sui-select.sui-select-dropdown-container--open .sui-select-dropdown .select2-results .select2-results__options .select2-results__option.select2-results__option--highlighted .sui-variable-value {
@@ -21559,6 +21560,14 @@ html.sui-has-overlay {
   }
 }
 
+.sui-2-12-23 .sui-wrap .fui-box-entries .fui-table-entries>thead>tr:not(.sui-accordion-item-content)>th .forminator-submissions-column-content,
+.sui-2-12-23 .sui-wrap .fui-box-entries .fui-table-entries>thead>tr:not(.sui-accordion-item-content)>td .forminator-submissions-column-content,
+.sui-2-12-23 .sui-wrap .fui-box-entries .fui-table-entries>tbody>tr:not(.sui-accordion-item-content)>th .forminator-submissions-column-content,
+.sui-2-12-23 .sui-wrap .fui-box-entries .fui-table-entries>tbody>tr:not(.sui-accordion-item-content)>td .forminator-submissions-column-content {
+  display: flex;
+  align-items: center;
+}
+
 .sui-2-12-23 .sui-wrap .fui-box-entries .fui-table-entries>thead>tr:not(.sui-accordion-item-content)>th .forminator-submissions-column-ellipsis,
 .sui-2-12-23 .sui-wrap .fui-box-entries .fui-table-entries>thead>tr:not(.sui-accordion-item-content)>td .forminator-submissions-column-ellipsis,
 .sui-2-12-23 .sui-wrap .fui-box-entries .fui-table-entries>tbody>tr:not(.sui-accordion-item-content)>th .forminator-submissions-column-ellipsis,
@@ -21695,6 +21704,14 @@ html.sui-has-overlay {
   height: 100%;
 }
 
+.sui-2-12-23 .sui-wrap .sui-tag.forminator-small-blue-tag {
+  background-color: #17a8e3;
+}
+
+.sui-2-12-23 .sui-wrap.sui-color-accessible .sui-tag.forminator-small-blue-tag {
+  background-color: #000;
+}
+
 .sui-2-12-23 .sui-wrap #create-pdf-modal>.sui-box {
   max-width: 800px;
   margin: 0 auto;
@@ -21702,6 +21719,10 @@ html.sui-has-overlay {
 
 .sui-2-12-23 .sui-wrap #create-pdf-modal .sui-box-selectors {
   padding: 30px;
+}
+
+.sui-2-12-23 .sui-wrap #create-pdf-modal .sui-box-selectors ul {
+  margin: 0 -15px;
 }
 
 .sui-2-12-23 .sui-wrap #create-pdf-modal .sui-box-selectors ul li {
@@ -22534,6 +22555,26 @@ html.sui-has-overlay {
   word-break: break-all;
 }
 
+.sui-2-12-23 .sui-wrap .sui-modal .sui-description strong,
+.sui-2-12-23 .sui-wrap .sui-modal .fui-table--apps tbody tr.fui-app--promote .fui-app--content .fui-app--description strong,
+.sui-2-12-23 .sui-wrap .fui-table--apps tbody tr.fui-app--promote .fui-app--content .sui-modal .fui-app--description strong {
+  color: #17a8e3;
+}
+
+.sui-2-12-23 .sui-wrap .sui-modal .sui-description.sui-description-alt,
+.sui-2-12-23 .sui-wrap .sui-modal .fui-table--apps tbody tr.fui-app--promote .fui-app--content .sui-description-alt.fui-app--description,
+.sui-2-12-23 .sui-wrap .fui-table--apps tbody tr.fui-app--promote .fui-app--content .sui-modal .sui-description-alt.fui-app--description {
+  margin-top: 10px;
+}
+
+@media (max-width: 782px) {
+  .sui-2-12-23 .sui-wrap .sui-modal .sui-description.sui-description-alt,
+  .sui-2-12-23 .sui-wrap .sui-modal .fui-table--apps tbody tr.fui-app--promote .fui-app--content .sui-description-alt.fui-app--description,
+  .sui-2-12-23 .sui-wrap .fui-table--apps tbody tr.fui-app--promote .fui-app--content .sui-modal .sui-description-alt.fui-app--description {
+    margin-top: -10px;
+  }
+}
+
 .sui-2-12-23 .sui-wrap #forminator-stripe-sca .sui-box .sui-box-header .sui-dialog-close {
   color: #fff;
 }
@@ -22704,6 +22745,13 @@ html.sui-has-overlay {
   margin-top: 5px;
   padding: 2px 6px;
   min-height: 13px;
+}
+
+.sui-2-12-23 .sui-wrap.sui-color-accessible .sui-modal .sui-description strong,
+.sui-2-12-23 .sui-wrap.sui-color-accessible .sui-modal .fui-table--apps tbody tr.fui-app--promote .fui-app--content .fui-app--description strong,
+.sui-2-12-23 .sui-wrap.sui-color-accessible .fui-table--apps tbody tr.fui-app--promote .fui-app--content .sui-modal .fui-app--description strong {
+  color: #000;
+  text-decoration: underline;
 }
 
 body.forminator_page_forminator-upgrade #wpbody-content .update-nag+.sui-wrap,
@@ -24747,6 +24795,16 @@ body.forminator_page_forminator-upgrade #wpbody-content .update-nag:empty+.sui-w
 
 .sui-2-12-23 .sui-wrap #forminator-modal-body--postdata>.sui-tabs>.sui-tabs-content>.sui-tab-content>.sui-box-settings-row .sui-form-field.fui-reduce-spacing:last-child {
   margin-bottom: 0;
+}
+
+.sui-2-12-23 .sui-wrap #pdf-payment-modal.sui-accordion.sui-accordion-flushed.fui-modal-accordion-flushed {
+  margin: -20px;
+}
+
+@media (min-width: 783px) {
+  .sui-2-12-23 .sui-wrap #pdf-payment-modal.sui-accordion.sui-accordion-flushed.fui-modal-accordion-flushed {
+    margin: -30px;
+  }
 }
 
 .sui-2-12-23 .sui-wrap #forminator-modal-body--password .sui-accordion-flushed {

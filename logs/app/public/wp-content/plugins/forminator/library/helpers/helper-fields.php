@@ -410,10 +410,10 @@ function forminator_get_vars( $add_query = false ) {
  */
 function forminator_get_payment_vars() {
 	$vars_list = array(
-		'payment_mode'     => esc_html__( 'Payment Mode', 'forminator' ),
-		'payment_status'   => esc_html__( 'Payment Status', 'forminator' ),
-		'payment_amount'   => esc_html__( 'Payment Amount', 'forminator' ),
-		'payment_currency' => esc_html__( 'Payment Currency', 'forminator' ),
+		'payment_amount'   => esc_html__( 'Amount', 'forminator' ),
+		'payment_currency' => esc_html__( 'Currency', 'forminator' ),
+		'payment_mode'     => esc_html__( 'Mode', 'forminator' ),
+		'payment_status'   => esc_html__( 'Status', 'forminator' ),
 		'transaction_id'   => esc_html__( 'Transaction ID', 'forminator' ),
 	);
 
@@ -503,6 +503,10 @@ function forminator_clear_field_id( $string ) {
  * @return mixed
  */
 function forminator_replace_form_data( $content, Forminator_Form_Model $custom_form = null, Forminator_Form_Entry_Model $entry = null, $get_labels = false, $urlencode = false, $user_meta = false, $is_pdf = false ) {
+	if ( is_null( $content ) ) {
+        $content = '';
+    }
+
 	$data             = Forminator_CForm_Front_Action::$prepared_data;
 	$matches          = array();
 	$field_types      = Forminator_Core::get_field_types();
@@ -1084,6 +1088,8 @@ function forminator_replace_variables( $content, $id = false, $entry = null ) {
 		$variables = array(
 			// Handle User IP Address variable.
 			'{user_ip}'            => forminator_user_ip(),
+			// Handle Date (F d, Y) variable.
+			'{date}'               => date_i18n( 'F d, Y', forminator_local_timestamp(), true ),
 			// Handle Date (mm/dd/yyyy) variable.
 			'{date_mdy}'           => date_i18n( 'm/d/Y', forminator_local_timestamp(), true ),
 			// Handle Date (dd/mm/yyyy) variable.
@@ -1447,6 +1453,7 @@ function render_entry( $item, $column_name, $field = null, $type = '', $remove_e
 							false !== strpos( $column_name, 'address' ) ||
 							false !== strpos( $column_name, 'upload' ) ||
 							false !== strpos( $column_name, 'postdata' ) ||
+							false !== strpos( $column_name, 'slider' ) ||
 							false !== strpos( $column_name, 'signature' )
 						)
 					) {
@@ -1820,7 +1827,7 @@ function forminator_get_fields_sorted( $sort_attr, $sort_flag = SORT_ASC ) {
 			if ( ! empty( $field_key ) ) {
 				if ( isset( $fields[ $field_key ] ) ) {
 					if ( is_int( $field_key ) ) {
-						$field_key = max( array_keys( $fields ) );
+						$field_key = (int) max( array_keys( $fields ) );
 						$field_key ++;// increase where there is dupe.
 					}
 				}
@@ -2282,15 +2289,7 @@ function forminator_replace_form_payment_data( $content, Forminator_Form_Model $
 	if ( empty( $custom_form ) ) {
 		return $content;
 	}
-	$form_fields = $custom_form->get_fields();
-	if ( ! empty( $form_fields ) && ! empty( $entry ) ) {
-		foreach ( $form_fields as $field ) {
-			$field_type = $field->__get( 'type' );
-			if ( in_array( $field_type, array( 'stripe', 'paypal' ), true ) && ! empty( $entry->meta_data[ $field->slug ] ) ) {
-				$payment_meta = $entry->meta_data[ $field->slug ]['value'];
-			}
-		}
-	}
+	$payment_meta = forminator_payment_data( $content, $custom_form, $entry );
 	if ( ! empty( $payment_meta ) ) {
 		$replaces = array(
 			'{payment_mode}'     => $payment_meta['mode'],
@@ -2304,6 +2303,34 @@ function forminator_replace_form_payment_data( $content, Forminator_Form_Model $
 	}
 
 	return apply_filters( 'forminator_replace_form_payment_data', $content, $custom_form, $entry );
+}
+
+/**
+ * Payment data
+ *
+ * @param $content
+ * @param $custom_form
+ * @param $entry
+ *
+ * @return array|mixed
+ */
+function forminator_payment_data( $content, $custom_form, $entry ) {
+	if ( empty( $custom_form ) ) {
+		return $content;
+	}
+	$payment_meta = array();
+	$form_fields  = $custom_form->get_fields();
+	if ( ! empty( $form_fields ) && ! empty( $entry ) ) {
+		foreach ( $form_fields as $field ) {
+			$field_type = $field->__get( 'type' );
+			if ( in_array( $field_type, array( 'stripe', 'paypal' ), true ) && ! empty( $entry->meta_data[ $field->slug ] ) ) {
+				$payment_meta = $entry->meta_data[ $field->slug ]['value'];
+				$payment_meta['payment_method'] = $field_type;
+			}
+		}
+	}
+
+	return $payment_meta;
 }
 
 /**
@@ -2417,7 +2444,7 @@ function forminator_get_entry_field_value( $entry, $mapper, $sub_meta_key = '', 
 	}
 
 	/**
-	 * Filter Get enrty field value
+	 * Filter Get entry field value
 	 *
 	 * @param string $value Current value.
 	 * @param object $entry Forminator_Form_Entry_Model object.

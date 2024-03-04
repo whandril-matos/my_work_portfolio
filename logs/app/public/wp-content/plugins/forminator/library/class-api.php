@@ -694,6 +694,10 @@ class Forminator_API {
 		// Generate field ID.
 		$total_fields_type = self::get_form_fields_by_type( $form_id, $type );
 
+		if ( is_wp_error( $total_fields_type ) ) {
+			$total_fields_type = array();
+		}
+
 		// Count fields of type.
 		$total_type = count( $total_fields_type ) + 1;
 

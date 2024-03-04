@@ -41,6 +41,11 @@ class Forminator_Assets_Enqueue_Form extends Forminator_Assets_Enqueue {
 		// Load form base scripts.
 		$this->load_base_scripts();
 
+		// FIELD: Slider.
+		if ( $render_obj->has_field_type( 'slider' ) ) {
+			self::load_slider_scripts();
+		}
+
 		// FIELD: Phone.
 		if ( $render_obj->has_field_type( 'phone' ) ) {
 			$this->load_phone_scripts();
@@ -57,8 +62,6 @@ class Forminator_Assets_Enqueue_Form extends Forminator_Assets_Enqueue {
 			 || $render_obj->has_field_type( 'number' ) ) {
 			$this->load_number_scripts();
 		}
-
-		// $this->get_module_design() returns the design.
 	}
 
 	/**
@@ -178,17 +181,33 @@ class Forminator_Assets_Enqueue_Form extends Forminator_Assets_Enqueue {
 	}
 
 	/**
+	 * Load slider field scripts
+	 */
+	public static function load_slider_scripts() {
+		wp_enqueue_script( 'jquery-touch-punch' );
+		wp_enqueue_script( 'jquery-ui-slider' );
+	}
+
+	/**
 	 * Load date field scripts
 	 *
 	 * @since 1.11
 	 */
 	public function load_date_scripts() {
-		global $wp_locale;
-
 		wp_enqueue_script( 'moment' );
 
 		// load date picker scripts always.
 		wp_enqueue_script( 'jquery-ui-datepicker' );
+		wp_localize_script( 'jquery-ui-datepicker', 'datepickerLang', self::get_datepicker_data() );
+	}
+
+	/**
+	 * Get date-picker data for using in JS
+	 *
+	 * @return array
+	 */
+	private static function get_datepicker_data() {
+		global $wp_locale;
 
 		// localize Datepicker js.
 		$datepicker_date_format = str_replace(
@@ -230,7 +249,7 @@ class Forminator_Assets_Enqueue_Form extends Forminator_Assets_Enqueue {
 			'isRTL'           => $wp_locale->is_rtl(),
 		);
 
-		wp_localize_script( 'forminator-front-scripts', 'datepickerLang', $datepicker_data );
+		return $datepicker_data;
 	}
 
 	/**
@@ -245,14 +264,12 @@ class Forminator_Assets_Enqueue_Form extends Forminator_Assets_Enqueue {
 		$style_version = '4.0.3';
 
 		$script_src     = forminator_plugin_url() . 'assets/js/library/intlTelInput.min.js';
-		$script_src_cleave     = forminator_plugin_url() . 'assets/js/library/cleave.min.js';
-		$script_src_cleave_phone     = forminator_plugin_url() . 'assets/js/library/cleave-phone.i18n.js';
+		$script_src_lib = forminator_plugin_url() . 'assets/js/library/libphonenumber.min.js';
 		$script_version = FORMINATOR_VERSION;
 
 		wp_enqueue_style( 'intlTelInput-forminator-css', $style_src, array(), $style_version ); // intlTelInput.
 		wp_enqueue_script( 'forminator-intlTelInput', $script_src, array( 'jquery' ), $script_version, false ); // intlTelInput.
-		wp_enqueue_script( 'forminator-cleave', $script_src_cleave, array( 'jquery' ), $script_version, false ); // intlTelInput.
-		wp_enqueue_script( 'forminator-cleave-phone', $script_src_cleave_phone, array( 'jquery' ), $script_version, false ); // intlTelInput.
+		wp_enqueue_script( 'forminator-libphonenumber', $script_src_lib, array( 'jquery' ), $script_version, false ); // libphonenumber.
 	}
 
 	/**

@@ -558,7 +558,6 @@
 						}
 
 						submitEvent.currentTarget.submit();
-						self.disable_form_submit( self, false );
 
 						self.showLeadsLoader( self );
 					}
@@ -1649,7 +1648,7 @@
 		},
 
 		disable_form_submit: function ( form, disable  ) {
-			$( form ).find( '.forminator-button-submit' ).attr( 'disabled', disable );
+			form.$el.find( '.forminator-button-submit' ).prop( 'disabled', disable );
 		},
 
 		showLeadsLoader: function ( quiz  ) {

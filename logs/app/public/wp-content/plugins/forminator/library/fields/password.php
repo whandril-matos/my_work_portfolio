@@ -129,7 +129,7 @@ class Forminator_Password extends Forminator_Field {
 		$id          = self::get_property( 'element_id', $field );
 		$name        = $id;
 		$ariaid      = $id;
-		$id          = 'forminator-field-' . $id . '_' . Forminator_CForm_Front::$uid;
+		$id          = self::get_field_id( $id );
 		$required    = self::get_property( 'required', $field, false );
 		$ariareq     = 'false';
 		$default     = self::get_property( 'default', $field, false );
@@ -203,7 +203,7 @@ class Forminator_Password extends Forminator_Field {
 		if ( $is_confirm ) {
 			$id   = $this->confirm_prefix . '_' . self::get_property( 'element_id', $field );
 			$name = $id;
-			$id   = 'forminator-field-' . $id . '_' . Forminator_CForm_Front::$uid;
+			$id   = self::get_field_id( $id );
 
 			$confirm_password_label       = self::get_property( 'confirm-password-label', $field, '' );
 			$confirm_password_placeholder = self::get_property( 'confirm-password-placeholder', $field );
@@ -363,7 +363,7 @@ class Forminator_Password extends Forminator_Field {
 			if ( $is_required ) {
 				$rules .= '"required": true,';
 			}
-			$rules .= '"equalTo": "' . $module_selector . ' #forminator-field-' . $this->get_id( $field ) . '_' . Forminator_CForm_Front::$uid . '",' . "\n";
+			$rules .= '"equalTo": "' . $module_selector . ' #' . self::get_field_id( $this->get_id( $field ) ) . '",' . "\n";
 			$rules .= '},';
 		}
 

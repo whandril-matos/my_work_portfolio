@@ -241,10 +241,9 @@ class Forminator_Calculator_Parser_Tokenizer {
 	 * @return string|null
 	 */
 	public function read_current() {
-		if ( $this->has_current() ) {
+		$char = null;
+		if ( $this->has_current() && ! empty( $this->input ) ) {
 			$char = $this->input[ $this->current_position ];
-		} else {
-			$char = null;
 		}
 
 		return $char;

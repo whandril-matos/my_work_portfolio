@@ -254,14 +254,8 @@ class Forminator_Stripe extends Forminator_Field {
 
 		$html = '<div class="forminator-field">';
 
-		if ( $label ) {
-			$html .= sprintf(
-				'<label for="%s" class="forminator-label">%s %s</label>',
-				$id . '-field',
-				$label,
-				forminator_get_required_icon()
-			);
-		}
+
+		$html .= self::get_field_label( $label, $id . '-field', true );
 
 		if ( 'material' === $settings['form-style'] ) {
 			$classes = 'forminator-input--wrap forminator-input--stripe';

@@ -124,7 +124,10 @@ class Forminator_Form_Field_Model {
 	 * @return array
 	 */
 	public function to_formatted_array() {
-		return Forminator_Migration::migrate_field( $this->raw, $this->form_settings );
+		$field_settings = $this->raw;
+
+		$field_settings['parent_group'] = $this->parent_group;
+		return Forminator_Migration::migrate_field( $field_settings, $this->form_settings );
 	}
 
 	/**
@@ -175,6 +178,8 @@ class Forminator_Form_Field_Model {
 			'year'           => 'element_id',
 			'day'            => 'element_id',
 			'month'          => 'element_id',
+			'min'            => 'element_id',
+			'max'            => 'element_id',
 			'street_address' => 'street_address',
 			'address_line'   => 'address_line',
 			'city'           => 'address_city',

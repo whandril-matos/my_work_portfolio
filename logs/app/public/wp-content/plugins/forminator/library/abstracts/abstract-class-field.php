@@ -43,6 +43,20 @@ abstract class Forminator_Field {
 	 */
 	public $category = '';
 
+    /**
+     * Type
+     *
+     * @var string
+     */
+    public $type = '';
+
+    /**
+     * Options
+     *
+     * @var array
+     */
+    public $options = array();
+
 	/**
 	 * @var array
 	 */
@@ -359,29 +373,7 @@ abstract class Forminator_Field {
 		// Get field id.
 		$get_id = $attr['id'];
 
-		if ( $label ) {
-
-			if ( $required ) {
-
-				$html .= sprintf(
-					'<label for="%s" class="forminator-label" id="%s">%s %s</label>',
-					$get_id,
-					$get_id . '-label',
-					esc_html( $label ),
-					forminator_get_required_icon()
-				);
-
-			} else {
-
-				$html .= sprintf(
-					'<label for="%s" class="forminator-label" id="%s">%s</label>',
-					$get_id,
-					$get_id . '-label',
-					esc_html( $label )
-				);
-
-			}
-		}
+		$html .= self::get_field_label( $label, $get_id, $required );
 
 		if ( isset( $wrapper_input[0] ) ) {
 			$html .= $wrapper_input[0];
@@ -440,29 +432,7 @@ abstract class Forminator_Field {
 
 		$markup = self::implode_attr( $attr );
 
-		if ( $label ) {
-
-			if ( $required ) {
-
-				$html .= sprintf(
-					'<label for="%s" id="%s" class="forminator-label">%s %s</label>',
-					$attr['id'],
-					$attr['id'] . '-label',
-					esc_html( $label ),
-					forminator_get_required_icon()
-				);
-
-			} else {
-
-				$html .= sprintf(
-					'<label for="%s" id="%s" class="forminator-label">%s</label>',
-					$attr['id'],
-					$attr['id'] . '-label',
-					esc_html( $label )
-				);
-
-			}
-		}
+		$html .= self::get_field_label( $label, $attr['id'], $required );
 
 		$html .= sprintf( '<textarea %s >%s</textarea>', $markup, wp_kses_post( $content ) );
 
@@ -497,20 +467,9 @@ abstract class Forminator_Field {
 
 		$editor_id = 'forminator-wp-editor-' . ( isset( $attr['id'] ) ? $attr['id'] : '' );
 		if ( $label ) {
-
-			if ( $required ) {
-
-				$html .= '<div class="forminator-field--label">';
-				$html .= sprintf( '<label for="%s" id="forminator-label-%s" class="forminator-label">%s %s</label>', $editor_id, $attr['id'], esc_html( $label ), forminator_get_required_icon() );
-				$html .= '</div>';
-
-			} else {
-
-				$html .= '<div class="forminator-field--label">';
-				$html .= sprintf( '<label for="%s" id="forminator-label-%s" class="forminator-label">%s</label>', $editor_id, $attr['id'], esc_html( $label ) );
-				$html .= '</div>';
-
-			}
+			$html .= '<div class="forminator-field--label">';
+			$html .= sprintf( '<label for="%s" id="forminator-label-%s" class="forminator-label">%s</label>', $editor_id, $attr['id'], esc_html( $label ) . ( $required ? ' ' . forminator_get_required_icon() : '' ) );
+			$html .= '</div>';
 		}
 
 		$wp_editor_class = isset( $attr['class'] ) ? $attr['class'] : '';
@@ -565,6 +524,37 @@ abstract class Forminator_Field {
 	}
 
 	/**
+	 * Maybe add label if it's not empty
+	 *
+	 * @param string $label Field label.
+	 * @param string $id Field id.
+	 * @param bool   $required Is field required or not.
+	 * @return string
+	 */
+	protected static function get_field_label( $label, $id, $required ) {
+		$html = '';
+		if ( $label ) {
+			$html .= sprintf(
+				'<label for="%s" id="%s" class="forminator-label">%s</label>',
+				esc_attr( $id ),
+				esc_attr( $id . '-label' ),
+				esc_html( $label ) . ( $required ? ' ' . forminator_get_required_icon() : '' )
+			);
+		}
+		return $html;
+	}
+
+	/**
+	 * Get full field id
+	 *
+	 * @param string $element_id Field slug.
+	 * @return string
+	 */
+	protected static function get_field_id( $element_id ) {
+		return 'forminator-field-' . $element_id . '_' . Forminator_CForm_Front::$uid;
+	}
+
+	/**
 	 * Return new select field
 	 *
 	 * @since 1.0
@@ -587,8 +577,6 @@ abstract class Forminator_Field {
 			$attr['aria-describedby'] = $attr['id'] . '-description';
 		}
 
-		$markup = self::implode_attr( $attr );
-
 		if ( isset( $attr['id'] ) ) {
 			$get_id = $attr['id'];
 		} else {
@@ -605,29 +593,7 @@ abstract class Forminator_Field {
 			$value = self::get_post_data( $attr['name'] );
 		}
 
-		if ( $label ) {
-
-			if ( $required ) {
-
-				$html .= sprintf(
-					'<label for="%s" id="%s" class="forminator-label">%s %s</label>',
-					$get_id,
-					$get_id . '-label',
-					esc_html( $label ),
-					forminator_get_required_icon()
-				);
-
-			} else {
-
-				$html .= sprintf(
-					'<label for="%s" id="%s" class="forminator-label">%s</label>',
-					$get_id,
-					$get_id . '-label',
-					esc_html( $label )
-				);
-
-			}
-		}
+		$html .= self::get_field_label( $label, $get_id, $required );
 
 		$markup .= ' data-default-value="' . esc_attr( $value ) . '"';
 
@@ -934,17 +900,16 @@ abstract class Forminator_Field {
 	/**
 	 * Check if Field is hidden based on conditions property and POST-ed data
 	 *
-	 * @since 1.0
-	 *
-	 * @param $field
-	 * @param $extra_conditions payment plan conditions.
+	 * @param array  $field_settings Field settings.
+	 * @param array  $extra_conditions payment plan conditions.
+	 * @param string $group_suffix Group suffix.
 	 *
 	 * @return bool
 	 */
-	public static function is_hidden( $field, $extra_conditions = array() ) {
-		$conditions       = isset( $extra_conditions['conditions'] ) ? $extra_conditions['conditions'] : self::get_property( 'conditions', $field, array() );
-		$condition_rule   = isset( $extra_conditions['condition_rule'] ) ? $extra_conditions['condition_rule'] : self::get_property( 'condition_rule', $field, 'all' );
-		$condition_action = isset( $extra_conditions['condition_action'] ) ? $extra_conditions['condition_action'] : self::get_property( 'condition_action', $field, 'show' );
+	public static function is_hidden( $field_settings, $extra_conditions = array(), $group_suffix = '' ) {
+		$conditions       = isset( $extra_conditions['conditions'] ) ? $extra_conditions['conditions'] : self::get_field_conditions( $field_settings, $group_suffix );
+		$condition_rule   = isset( $extra_conditions['condition_rule'] ) ? $extra_conditions['condition_rule'] : self::get_property( 'condition_rule', $field_settings, 'all' );
+		$condition_action = isset( $extra_conditions['condition_action'] ) ? $extra_conditions['condition_action'] : self::get_property( 'condition_action', $field_settings, 'show' );
 
 		// empty conditions.
 		if ( empty( $conditions ) ) {
@@ -978,7 +943,7 @@ abstract class Forminator_Field {
 			// Check parent conditions only if the current condition is matched.
 			if ( $is_condition_fulfilled && ! $current_is_hidden && Forminator_Front_Action::$module_object ) {
 				$parent_field  = Forminator_Front_Action::$module_object->get_field( $element_id );
-				$parent_hidden = self::is_hidden( $parent_field );
+				$parent_hidden = self::is_hidden( $parent_field, array(), $group_suffix );
 
 				if ( $parent_hidden ) {
 					$condition_fulfilled--;
@@ -995,13 +960,52 @@ abstract class Forminator_Field {
 
 		$all_matched = ( $condition_fulfilled > 0 && 'any' === $condition_rule ) || ( $conditions_count === $condition_fulfilled && 'all' === $condition_rule );
 
-		// initialized as hidden
+		// initialized as hidden.
 		if ( 'show' === $condition_action ) {
 			return ! $all_matched;
 		} else {
-			// initialized as shown
+			// initialized as shown.
 			return $all_matched;
 		}
+	}
+
+	/**
+	 * Get field conditions
+	 *
+	 * @param array  $field_settings Field settings.
+	 * @param string $group_suffix Group suffix.
+	 * @return array
+	 */
+	public static function get_field_conditions( $field_settings, $group_suffix ) {
+		$conditions = self::get_property( 'conditions', $field_settings, array() );
+
+		foreach ( $conditions as $key => $condition ) {
+			if ( forminator_old_field( $condition['element_id'], Forminator_Front_Action::$module_object->get_fields(), Forminator_Front_Action::$module_id ) ) {
+				unset( $conditions[ $key ] );
+			}
+		}
+
+		if ( ! $group_suffix || empty( $conditions ) ) {
+			return $conditions;
+		}
+
+		$parent_group   = $field_settings['parent_group'] ?? '';
+		$grouped_fields = Forminator_Front_Action::$module_object->get_grouped_fields_slugs( $parent_group );
+
+		if ( empty( $grouped_fields ) ) {
+			return $conditions;
+		}
+
+		foreach ( $conditions as $key => $condition ) {
+			foreach ( $grouped_fields as $g_field ) {
+				if ( $condition['element_id'] === $g_field
+					|| 0 === strpos( $condition['element_id'], $g_field . '-' ) ) {
+					$conditions[ $key ]['element_id'] .= $group_suffix;
+				}
+			}
+		}
+
+		return $conditions;
 	}
 
 	/**
@@ -1178,14 +1182,15 @@ abstract class Forminator_Field {
 			case 'is_before':
 				if ( null !== $form_id && ! empty( $form_field_value ) ) {
 					$date = self::get_day_or_month( $form_field_value, $condition['element_id'], $form_id, 'j F Y' );
-					return strtotime( $date ) < strtotime( $condition_value );
+
+					return strtotime( $date ) < Forminator_Date::prepare_condition_date( $condition_value );
 				}
 
 				return false;
 			case 'is_after':
 				if ( null !== $form_id && ! empty( $form_field_value ) ) {
 					$date = self::get_day_or_month( $form_field_value, $condition['element_id'], $form_id, 'j F Y' );
-					return strtotime( $date ) > strtotime( $condition_value );
+					return strtotime( $date ) > Forminator_Date::prepare_condition_date( $condition_value );
 				}
 
 				return false;
@@ -1716,7 +1721,8 @@ abstract class Forminator_Field {
 	 * @return int
 	 */
 	public static function get_calculable_precision( $field_settings ) {
-		$precision = self::get_property( 'precision', $field_settings, 2, 'num' );
+		$fallback  = ! empty( $field_settings['type'] ) && 'number' === $field_settings['type'] ? 0 : 2;
+		$precision = self::get_property( 'precision', $field_settings, $fallback, 'num' );
 
 		/**
 		 * Filter formula being used on calculable value on abstract level
@@ -1928,11 +1934,7 @@ abstract class Forminator_Field {
 	 * @return string
 	 */
 	public static function forminator_number_formatting( $field, $number ) {
-		$default_precision = 2;
-		if ( isset( $field['type'] ) && 'number' === $field['type'] ) {
-			$default_precision = 0;
-		}
-		$precision  = self::get_property( 'precision', $field, $default_precision, 'num' );
+		$precision  = self::get_calculable_precision( $field );
 		$separator  = self::get_property( 'separators', $field, 'blank' );
 		$separators = self::forminator_separators( $separator, $field );
 		$data_value = (float) str_replace( $separators['point'], '.', $number );
@@ -2091,5 +2093,21 @@ abstract class Forminator_Field {
 		if ( ! empty( $rules ) ) {
 			insert_with_markers( $htaccess_file, 'Forminator', $rules );
 		}
+	}
+
+	/**
+	 * Update metadata for uploaded file.
+	 *
+	 * @param $attachment_id
+	 * @param $file
+	 *
+	 * @return void
+	 */
+	public static function generate_upload_metadata( $attachment_id, $file ) {
+		require_once ABSPATH . 'wp-admin/includes/media.php';
+		require_once ABSPATH . 'wp-admin/includes/image.php';
+
+		// Generate and save the attachment metas into the database.
+		wp_update_attachment_metadata( $attachment_id, wp_generate_attachment_metadata( $attachment_id, $file ) );
 	}
 }

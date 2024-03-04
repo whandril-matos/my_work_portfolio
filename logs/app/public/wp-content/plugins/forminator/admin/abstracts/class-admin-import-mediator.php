@@ -112,6 +112,7 @@ abstract class Forminator_Import_Mediator {
 			'website',
 			'checkbox',
 			'number',
+			'slider',
 			'textarea',
 			'text',
 			'select',

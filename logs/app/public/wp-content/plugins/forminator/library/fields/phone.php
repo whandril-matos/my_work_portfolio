@@ -162,7 +162,7 @@ class Forminator_Phone extends Forminator_Field {
 		$id                    = self::get_property( 'element_id', $field );
 		$name                  = $id;
 		$ariaid                = $id;
-		$id                    = 'forminator-field-' . $id . '_' . Forminator_CForm_Front::$uid;
+		$id                    = self::get_field_id( $id );
 		$required              = self::get_property( 'required', $field, false, 'bool' );
 		$ariareq               = 'false';
 		$design                = $this->get_form_style( $settings );

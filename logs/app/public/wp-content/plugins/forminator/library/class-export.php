@@ -744,8 +744,7 @@ class Forminator_Export {
 		);
 
 		if ( ! $copies ) {
-			$data[] = '';
-			return $data;
+			$copies[ $mapper['meta_key'] ] = array();
 		}
 
 		$temp_data = array();

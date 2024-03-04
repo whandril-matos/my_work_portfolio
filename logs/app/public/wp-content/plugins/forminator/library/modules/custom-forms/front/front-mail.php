@@ -121,8 +121,10 @@ class Forminator_CForm_Front_Mail extends Forminator_Mail {
 			isset( $submitted_data['action'] ) &&
 			'forminator_email_draft_link' === $submitted_data['action']
 		) {
-			// Must already be sanitized in the previous function.
-			$data = $submitted_data;
+			$data = recreate_prepared_data( $custom_form, $entry );
+
+			// Map data to prepared data.
+			Forminator_Front_Action::$prepared_data = $data;
 		}
 
 		if ( empty( $data['current_url'] ) ) {

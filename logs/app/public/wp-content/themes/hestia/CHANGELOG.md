@@ -1,3 +1,31 @@
+##### [Version 3.1.4](https://github.com/Codeinwp/hestia-pro/compare/v3.1.3...v3.1.4) (2024-02-27)
+
+### Bug Fixes
+- Fixed WPML compatibility with custom layouts
+
+### Improvements
+- Updated dependencies
+- Added NPS Survey
+- Preparation for future BF campaign
+
+##### [Version 3.1.3](https://github.com/Codeinwp/hestia-pro/compare/v3.1.2...v3.1.3) (2024-02-06)
+
+### Fixes
+- Enhanced security
+- Updated dependencies
+- Fixed loading of custom Font Awesome icons
+
+##### [Version 3.1.2](https://github.com/Codeinwp/hestia-pro/compare/v3.1.1...v3.1.2) (2024-02-01)
+
+### Fixes
+- Updated references from SendinBlue to Brevo 
+- Solved warning on checking styles 
+- Add undefined check for mutations of addViewCart
+- Enhanced Security
+
+### Improvements
+- Added CTA in Customizer
+
 ##### [Version 3.1.1](https://github.com/Codeinwp/hestia-pro/compare/v3.1.0...v3.1.1) (2024-01-11)
 
 ### Improvements

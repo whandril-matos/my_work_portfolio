@@ -1404,15 +1404,11 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 		if ( self::$is_draft || empty( self::$info['select_field_value'] ) ) {
 			return $result;
 		}
-		foreach ( self::$info['select_field_value'] as $select_name => $select_field ) {
+		foreach ( self::$info['select_field_value'] as $select_name => $options ) {
 			$select_value = array();
-			foreach ( $select_field as $select ) {
-				if ( empty( $select['limit'] ) ) {
-					continue;
-				}
-				$entries = Forminator_Form_Entry_Model::select_count_entries_by_meta_field( self::$module_id, $select_name, $select['value'], $select['label'], $select['type'] );
-				if ( $select['limit'] <= $entries ) {
-					$select_value[] = $select;
+			foreach ( $options as $option ) {
+				if ( Forminator_Form_Entry_Model::is_option_limit_reached( self::$module_id, $select_name, $option['type'], $option ) ) {
+					$select_value[] = $option;
 				}
 			}
 			if ( ! empty( $select_value ) ) {
@@ -1774,10 +1770,9 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 						continue;
 					}
 
-					$conditions   = self::get_field_conditions( $field_settings, $fields, $field->parent_group, $group_suffix );
+					$conditions   = Forminator_Field::get_field_conditions( $field_settings, $group_suffix );
 					$field_type   = Forminator_Field::get_property( 'type', $field_settings );
 					$field_object = Forminator_Core::get_field_object( $field_type );
-					$is_hidden    = null;
 
 					if ( $conditions ) {
 						$dependent_fields = wp_list_pluck( $conditions, 'element_id' );
@@ -1786,7 +1781,7 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 							$unspecified[ $field_id . $group_suffix ] = $conditions;
 							continue;
 						} else {
-							$is_hidden = Forminator_Field::is_hidden( $field_settings, array( 'conditions' => $conditions ) );
+							$is_hidden = Forminator_Field::is_hidden( $field_settings, array( 'conditions' => $conditions ), $group_suffix );
 							if ( $is_hidden ) {
 								self::update_hidden_fields_array( $field_id, $group_suffix, $field_settings );
 								continue;
@@ -1794,7 +1789,7 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 						}
 					}
 
-					$submitted_field_data = isset( self::$prepared_data[ $field_id . $group_suffix ] ) ? self::$prepared_data[ $field_id . $group_suffix ] : null;
+					$submitted_field_data = self::$prepared_data[ $field_id . $group_suffix ] ?? null;
 					$calculable_value     = $field_object::get_calculable_value( $submitted_field_data, $field_settings );
 					if ( 'calculation' !== $field_type ) {
 						if ( in_array( $field_type, array( 'stripe', 'paypal' ), true ) ) {
@@ -1926,46 +1921,6 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 	}
 
 	/**
-	 * Get field conditions
-	 *
-	 * @param array  $field_settings Field settings.
-	 * @param array  $fields Fields.
-	 * @param string $parent_group Parent group slug.
-	 * @param string $group_suffix Group suffix.
-	 * @return array
-	 */
-	private static function get_field_conditions( $field_settings, $fields, $parent_group, $group_suffix ) {
-		$conditions = Forminator_Field::get_property( 'conditions', $field_settings, array() );
-
-		foreach ( $conditions as $key => $condition ) {
-			if ( forminator_old_field( $condition['element_id'], $fields, self::$module_id ) ) {
-				unset( $conditions[ $key ] );
-			}
-		}
-
-		if ( ! $group_suffix || empty( $conditions ) ) {
-			return $conditions;
-		}
-
-		$grouped_fields = self::$module_object->get_grouped_fields_slugs( $parent_group );
-
-		if ( empty( $grouped_fields ) ) {
-			return $conditions;
-		}
-
-		foreach ( $conditions as $key => $condition ) {
-			foreach ( $grouped_fields as $g_field ) {
-				if ( $condition['element_id'] === $g_field
-						|| 0 === strpos( $condition['element_id'], $g_field . '-' ) ) {
-					$conditions[ $key ]['element_id'] .= $group_suffix;
-				}
-			}
-		}
-
-		return $conditions;
-	}
-
-	/**
 	 * Check if all dependent fields are already defined
 	 *
 	 * @param array $dependent_fields Dependent fields.
@@ -2029,7 +1984,7 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 	 * @return string
 	 */
 	private static function maybe_replace_groupped_fields( $formula ) {
-		$pattern = '/\{((?:calculation|number|currency|radio|select|checkbox)\-\d+)\-\*\}/';
+		$pattern = '/\{((?:calculation|number|slider|currency|radio|select|checkbox)\-\d+(?:-min|-max)?)\-\*\}/';
 		preg_match_all( $pattern, $formula, $matches );
 
 		foreach ( $matches[1] as $main_field ) {
@@ -2062,12 +2017,8 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 	public static function calculator_pull_fields( $formula ) {
 		$field_types             = Forminator_Core::get_field_types();
 		$increment_field_pattern = sprintf( '(%s)-\d+', implode( '|', $field_types ) );
-		$pattern                 = '/\{(' . $increment_field_pattern . ')(\-[A-Za-z-_]+)?(\-[A-Za-z0-9-_]+)?\}/';
+		$pattern                 = '/\{((' . $increment_field_pattern . ')(\-[A-Za-z-_]+)?(\-[A-Za-z0-9-_]+)?)\}/';
 		preg_match_all( $pattern, $formula, $matches );
-
-		foreach ( $matches[4] as $key => $group_suffix ) {
-			$matches[1][ $key ] .= $group_suffix;
-		}
 
 		return $matches;
 	}
@@ -2081,7 +2032,7 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 	 * @return type
 	 */
 	public static function calculate_formula( $formula, $visible_fields, $field_settings ) {
-		$formula           = self::maybe_replace_groupped_fields( $formula );
+		$formula           = self::maybe_replace_groupped_fields( $formula ); // todo: remove it, cuz it was already replaced.
 		$fields_in_formula = self::calculator_pull_fields( $formula );
 
 		// later usage for str_replace.
@@ -2278,7 +2229,7 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 		foreach ( $fields as $key => $field ) {
 			if (
 				! isset( $field['field_type'] ) ||
-				'upload' !== $field['field_type'] 
+				'upload' !== $field['field_type']
 			) {
 				continue;
 			}
@@ -2315,6 +2266,8 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 					( 'single' === $file_type || ( 'multiple' === $file_type && 'ajax' !== $upload_method ) )
 				) {
 					$upload_data = $form_field_obj->transfer_upload( self::$module_id, $form_upload_data, $field_settings );
+				} elseif ( ! self::$has_payment && ! empty( $form_upload_data['file'] ) ) {
+					$upload_data = $form_upload_data['file'];
 				}
 			}
 
@@ -2366,7 +2319,7 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 		$field_id     = Forminator_Field::get_property( 'element_id', $field_settings );
 		$options      = Forminator_Field::get_property( 'options', $field_settings );
 		$value_type   = Forminator_Field::get_property( 'value_type', $field_settings );
-		$select_array = (array) self::$prepared_data[ $field_id ];
+		$select_array = (array) ( self::$prepared_data[ $field_id ] ?? array() );
 		foreach ( $options as $o => $option ) {
 			if ( in_array( $option['value'], $select_array ) ) {
 				self::$info['select_field_value'][ $field_id ][ $o ] = array(
@@ -2692,7 +2645,8 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 		unset( $custom_form->notifications );
 		$custom_form->notifications[] = $draft_notifications;
 		$forminator_mail_sender       = new Forminator_CForm_Front_Mail();
-		$mail_sent                    = $forminator_mail_sender->process_mail( $custom_form, self::get_entry(), $submitted_data );
+		$draft_entry                  = new Forminator_Form_Entry_Model( $draft_id );
+		$mail_sent                    = $forminator_mail_sender->process_mail( $custom_form, $draft_entry, $submitted_data );
 		// $mail_sent = true;
 		$response['draft_mail_sent'] = $mail_sent;
 

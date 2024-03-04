@@ -135,25 +135,7 @@ class Forminator_Upload extends Forminator_Field {
 
 		$html .= '<div class="forminator-field">';
 
-		if ( $label ) {
-
-			if ( $required ) {
-
-				$html .= sprintf(
-					'<label for="%s" class="forminator-label">%s %s</label>',
-					'forminator-field-' . $uniq_id,
-					$label,
-					forminator_get_required_icon()
-				);
-			} else {
-
-				$html .= sprintf(
-					'<label for="%s" class="forminator-label">%s</label>',
-					'forminator-field-' . $uniq_id,
-					$label
-				);
-			}
-		}
+		$html .= self::get_field_label( $label, 'forminator-field-' . $uniq_id, $required );
 
 		$file_limit_type  = self::get_property( 'file-limit', $field, 'unlimited' );
 		$custom_file_type = self::get_property( 'custom-files', $field, false );
@@ -510,11 +492,7 @@ class Forminator_Upload extends Forminator_Field {
 							$file_path
 						);
 
-						// wp_generate_attachment_metadata() won't work if you do not include this file.
-						require_once ABSPATH . 'wp-admin/includes/image.php';
-
-						// Generate and save the attachment metas into the database.
-						wp_update_attachment_metadata( $upload_id, wp_generate_attachment_metadata( $upload_id, $file_path ) );
+						self::generate_upload_metadata( $upload_id, $file_path );
 					}
 
 					return array(
@@ -600,11 +578,7 @@ class Forminator_Upload extends Forminator_Field {
 									$file_path
 								);
 
-								// wp_generate_attachment_metadata() won't work if you do not include this file.
-								require_once ABSPATH . 'wp-admin/includes/image.php';
-
-								// Generate and save the attachment metas into the database.
-								wp_update_attachment_metadata( $upload_id, wp_generate_attachment_metadata( $upload_id, $file_path ) );
+								self::generate_upload_metadata( $upload_id, $file_path );
 							}
 
 							$file_path_arr[] = $file_path;
@@ -820,11 +794,7 @@ class Forminator_Upload extends Forminator_Field {
 						$file_path
 					);
 
-					// wp_generate_attachment_metadata() won't work if you do not include this file.
-					require_once ABSPATH . 'wp-admin/includes/image.php';
-
-					// Generate and save the attachment metas into the database.
-					wp_update_attachment_metadata( $upload_id, wp_generate_attachment_metadata( $upload_id, $file_path ) );
+					self::generate_upload_metadata( $upload_id, $file_path );
 				}
 			}
 		} else {

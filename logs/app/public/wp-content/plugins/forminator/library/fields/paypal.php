@@ -102,9 +102,8 @@ class Forminator_PayPal extends Forminator_Field {
 		$this->field         = $field;
 		$this->form_settings = $settings;
 
-		$id                  = self::get_property( 'element_id', $field );
-		$element_name        = $id;
-		$field_id            = $id . '-field';
+		$element_name        = self::get_property( 'element_id', $field );
+		$field_id            = $element_name . '-field';
 		$mode                = self::get_property( 'mode', $field, 'sandbox' );
 		$currency            = self::get_property( 'currency', $field, $this->get_default_currency() );
 		$amount_type         = self::get_property( 'amount_type', $field, 'fixed' );

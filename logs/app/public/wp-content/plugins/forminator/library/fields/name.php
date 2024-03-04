@@ -137,9 +137,8 @@ class Forminator_Name extends Forminator_Field {
 	 */
 	public function get_simple( $field, $design, $draft_value = null ) {
 		$html        = '';
-		$id          = self::get_property( 'element_id', $field );
-		$name        = $id;
-		$id          = 'forminator-field-' . $id . '_' . Forminator_CForm_Front::$uid;
+		$name        = self::get_property( 'element_id', $field );
+		$id          = self::get_field_id( $name );
 		$required    = self::get_property( 'required', $field, false );
 		$ariareq     = 'false';
 		$label       = esc_html( self::get_property( 'field_label', $field, '' ) );
@@ -266,7 +265,7 @@ class Forminator_Name extends Forminator_Field {
 
 			$prefix_data = array(
 				'name'       => self::get_subfield_id( $id, '-prefix' ),
-				'id'         => 'forminator-form-' . $this->form_settings['form_id'] . '__field--' . $id . '_' . Forminator_CForm_Front::$uid,
+				'id'         => self::get_field_id( $this->form_settings['form_id'] . '__field--' . $id ),
 				'class'      => 'forminator-select2',
 				'data-multi' => true,
 			);
@@ -323,7 +322,7 @@ class Forminator_Name extends Forminator_Field {
 				'type'          => 'text',
 				'name'          => self::get_subfield_id( $id, '-first-name' ),
 				'placeholder'   => $this->sanitize_value( self::get_property( 'fname_placeholder', $field ) ),
-				'id'            => 'forminator-field-first-' . $id . '_' . Forminator_CForm_Front::$uid,
+				'id'            => self::get_field_id( 'first-' . $id ),
 				'class'         => 'forminator-input',
 				'aria-required' => $fname_ariareq,
 				'data-multi'    => true,
@@ -367,7 +366,7 @@ class Forminator_Name extends Forminator_Field {
 				'type'          => 'text',
 				'name'          => self::get_subfield_id( $id, '-middle-name' ),
 				'placeholder'   => $this->sanitize_value( self::get_property( 'mname_placeholder', $field ) ),
-				'id'            => 'forminator-field-middle-' . $id . '_' . Forminator_CForm_Front::$uid,
+				'id'            => self::get_field_id( 'middle-' . $id ),
 				'class'         => 'forminator-input',
 				'aria-required' => $mname_ariareq,
 				'data-multi'    => true,
@@ -407,7 +406,7 @@ class Forminator_Name extends Forminator_Field {
 				'type'          => 'text',
 				'name'          => self::get_subfield_id( $id, '-last-name' ),
 				'placeholder'   => $this->sanitize_value( self::get_property( 'lname_placeholder', $field ) ),
-				'id'            => 'forminator-field-last-' . $id . '_' . Forminator_CForm_Front::$uid,
+				'id'            => self::get_field_id( 'last-' . $id ),
 				'class'         => 'forminator-input',
 				'aria-required' => $lname_ariareq,
 				'data-multi'    => true,

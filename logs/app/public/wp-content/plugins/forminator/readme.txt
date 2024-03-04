@@ -1,13 +1,13 @@
 === Forminator - Contact Form, Payment Form & Custom Form Builder ===
 Plugin Name: Forminator - Contact Form, Payment Form & Custom Form Builder
-Version: 1.28.1
+Version: 1.29.0
 Author: WPMU DEV
 Author URI: https://wpmudev.com/
 Contributors: WPMUDEV
 Tags: forms, contact form, wordpress form plugin, payment form, custom form, form builder, paypal form wordpress, form maker, quiz, quiz builder, order form, stripe payments, paypal payments, stripe form, paypal form
 Requires at least: 5.2
 Tested up to: 6.4
-Stable tag: 1.28.1
+Stable tag: 1.29.0
 Requires PHP: 7.4
 License: GPL v2 - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
@@ -222,6 +222,26 @@ We take plugin security incredibly seriously; if you have a bug or vulnerability
 9. Allow simple drag and drop multi-file uploads for users.
 
 == Changelog ==
+
+= 1.29.0 ( 2024-01-30 ) =
+
+- New: Range slider
+- Fix: Email notification from Save and Continue feature does not support {all_fields} or individual fields
+- Fix: Embed URL receives the referrer URL instead of page URL when the form is not loading from Ajax
+- Fix: The export of Forminator submissions displays an incomplete URL for the uploaded files.
+- Fix: The total value of repeater field groups is not correctly reflected on email notifications
+- Fix: Add_form_field API fatal error in PHP 8.0+
+- Fix: The repeater field data in the email notification is missing and the submission shows incorrect data
+- Fix: If a visibility condition is configured on the Stripe field, payment plan conditions don't work
+- Fix: ActionScheduler crashes website due to outdated table structure
+- Fix: Form displays "This value must be greater than or equal to 1" error
+- Fix: The Number field decimal doesn't work on emails
+- Fix: When two users submit the form at once, limit submission doesn't work
+- Fix: Export missing field data
+- Fix: Required Checkbox triggers an error message on pagination
+- Fix: The manual approval of user registration forms doesn't work when the website URL is too long
+- Fix: Zapier WebHook integration missing upload field data
+- Fix: Upload timeout error
 
 = 1.28.1 ( 2023-12-18 ) =
 

@@ -120,10 +120,11 @@ class Forminator_Time extends Forminator_Field {
 		$this->field = $field;
 
 		$html     = '';
-		$id       = self::get_property( 'element_id', $field );
-		$hour_id  = self::get_subfield_id( $id, '-hours' );
-		$min_id   = self::get_subfield_id( $id, '-minutes' );
-		$ampm_id  = self::get_subfield_id( $id, '-ampm' );
+		$name     = self::get_property( 'element_id', $field );
+		$id       = self::get_field_id( $name );
+		$hour_id  = self::get_subfield_id( $name, '-hours' );
+		$min_id   = self::get_subfield_id( $name, '-minutes' );
+		$ampm_id  = self::get_subfield_id( $name, '-ampm' );
 		$required = self::get_property( 'required', $field, false, 'bool' );
 		$design   = $this->get_form_style( $settings );
 		// backward compatibilty when time doesnt have field_type.
@@ -138,7 +139,6 @@ class Forminator_Time extends Forminator_Field {
 		$has_limiter      = 'specific' === $restrict_time ? 'has-time-limiter' : '';
 		$required_origin  = $required;
 		$draft_value      = isset( $draft_value['value'] ) ? $draft_value['value'] : '';
-		$uniq_id          = Forminator_CForm_Front::$uid;
 
 		$default_time_hour   = '';
 		$default_time_minute = '';
@@ -180,26 +180,9 @@ class Forminator_Time extends Forminator_Field {
 			}
 		}
 
+
+		$html .= self::get_field_label( $field_label, 'forminator-field-' . $name, $required );
 		if ( ! empty( $field_label ) ) {
-
-			if ( $required ) {
-
-				$html .= sprintf(
-					'<label id="%s" class="forminator-label">%s %s</label>',
-					'forminator-field-' . $id,
-					$field_label,
-					forminator_get_required_icon()
-				);
-
-			} else {
-
-				$html .= sprintf(
-					'<label id="%s" class="forminator-label">%s</label>',
-					'forminator-field-' . $id,
-					$field_label
-				);
-			}
-
 			// mark hours and minutes required markup as false.
 			$required = false;
 		}
@@ -226,10 +209,10 @@ class Forminator_Time extends Forminator_Field {
 					'min'              => '0',
 					'max'              => ( 'twelve' === $type ) ? '12' : '23',
 					'placeholder'      => $this->sanitize_value( self::get_property( 'hh_placeholder', $field ) ),
-					'id'               => 'forminator-field-' . $hour_id . '_' . $uniq_id,
+					'id'               => self::get_field_id( $hour_id ),
 					'class'            => 'forminator-input time-hours ' . $has_limiter,
 					'data-field'       => 'hours',
-					'aria-describedby' => 'forminator-field-' . $id . '_' . $uniq_id . '-description',
+					'aria-describedby' => $id . '-description',
 				);
 
 				$hours ['value'] = '0';
@@ -250,10 +233,10 @@ class Forminator_Time extends Forminator_Field {
 
 					$hours_data = array(
 						'name'             => $hour_id,
-						'id'               => 'forminator-form-' . $settings['form_id'] . '__field--' . $hour_id . '_' . $uniq_id,
+						'id'               => self::get_field_id( $settings['form_id'] . '__field--' . $hour_id ),
 						'class'            => 'forminator-select2 time-hours ' . $has_limiter,
 						'data-field'       => 'hours',
-						'aria-describedby' => 'forminator-field-' . $id . '_' . $uniq_id . '-description',
+						'aria-describedby' => $id . '-description',
 					);
 
 					$limits = array();
@@ -296,10 +279,10 @@ class Forminator_Time extends Forminator_Field {
 					'max'         => 59,
 					'name'        => $min_id,
 					'placeholder' => $this->sanitize_value( self::get_property( 'mm_placeholder', $field ) ),
-					'id'          => 'forminator-field-' . $min_id . '_' . $uniq_id,
+					'id'          => self::get_field_id( $min_id ),
 					'class'       => 'forminator-input time-minutes ' . $has_limiter,
 					'data-field'  => 'minutes',
-					'aria-describedby' => 'forminator-field-' . $id . '_' . $uniq_id . '-description',
+					'aria-describedby' => $id . '-description',
 				);
 
 				$minutes ['value'] = '0';
@@ -319,10 +302,10 @@ class Forminator_Time extends Forminator_Field {
 
 					$minutes_data = array(
 						'name'       => $min_id,
-						'id'         => 'forminator-form-' . $settings['form_id'] . '__field--' . $min_id . '_' . $uniq_id,
+						'id'         => self::get_field_id( $settings['form_id'] . '__field--' . $min_id ),
 						'class'      => 'forminator-select2 time-minutes ' . $has_limiter,
 						'data-field' => 'minutes',
-						'aria-describedby' => 'forminator-field-' . $id . '_' . $uniq_id . '-description',
+						'aria-describedby' => $id . '-description',
 					);
 
 					$html .= self::create_select(
@@ -355,10 +338,10 @@ class Forminator_Time extends Forminator_Field {
 					 */
 					$ampm = array(
 						'name'       => $ampm_id,
-						'id'         => 'forminator-form-' . $settings['form_id'] . '__field--' . $ampm_id . '_' . $uniq_id,
+						'id'         => self::get_field_id( $settings['form_id'] . '__field--' . $ampm_id ),
 						'class'      => 'forminator-select2 time-ampm ' . $has_limiter,
 						'data-field' => 'ampm',
-						'aria-describedby' => 'forminator-field-' . $id . '_' . $uniq_id . '-description',
+						'aria-describedby' => $id . '-description',
 					);
 
 					$options = array(
@@ -401,7 +384,7 @@ class Forminator_Time extends Forminator_Field {
 
 				$html .= '</div>';
 
-				$html .= self::get_description( $description, 'forminator-field-' . $id . '_' . $uniq_id );
+				$html .= self::get_description( $description, $id );
 
 				return apply_filters( 'forminator_field_time_markup', $html, $field );
 	}
@@ -427,8 +410,8 @@ class Forminator_Time extends Forminator_Field {
 			$max = 12;
 		} else {
 			if ( ! empty( $limits ) ) {
-				$min = $limits['start'];
-				$max = $limits['end'];
+				$min = (int) $limits['start'];
+				$max = (int) $limits['end'];
 			} else {
 				$min = 0;
 				$max = 23;

@@ -451,7 +451,6 @@ class Forminator_Addon_Mailchimp_Wp_Api {
 			'date',
 			'url',
 			'image',
-			'url',
 			'radio',
 			'dropdown',
 			'birthday',

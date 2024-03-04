@@ -374,7 +374,7 @@
 			});
 
 			// Trigger change for the required checkbox field.
-			$( '.forminator-field.required input[type="checkbox"]' ).on( 'change', function () {
+			$( '.forminator-field.required input[type="checkbox"]' ).on( 'input', function () {
 				$( this ).not( ':checked' ).trigger( 'focusout' );
 			});
 		}

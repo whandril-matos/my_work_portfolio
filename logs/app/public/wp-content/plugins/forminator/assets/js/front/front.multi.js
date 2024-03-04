@@ -415,6 +415,10 @@
 				if ( self.settings.text_prev ) {
 					args.prev_button = self.settings.text_prev;
 				}
+				if ( self.settings.submit_class ) {
+					args.submitButtonClass = self.settings.submit_class;
+				}
+
 				$(self.element).forminatorFrontPagination(args);
 			});
 
@@ -588,12 +592,27 @@
 						});
 					}
 
-					var dialCode = '+' + $(this).intlTelInput('getSelectedCountryData').dialCode;
+					// Use libphonenumber to format the telephone number.
+					$(this).on('input', function() {
+						var countryData = $( self ).intlTelInput( 'getSelectedCountryData' );
+						var regionCode = (countryData && countryData.iso2) ? countryData.iso2.toUpperCase() : '';
 
-					new Cleave(this, {
-						phone: true,
-						phoneRegionCode: 'undefined' !== typeof ( country ) ? country : 'us',
-						prefix: ('enabled' === is_national_phone) ? dialCode : null,
+						// return if no region code is present
+						if('' === regionCode) {
+							return
+						}
+
+						var phoneNumber = $(this).val();
+						var isValidLength = libphonenumber.validatePhoneNumberLength(phoneNumber, regionCode) !== 'TOO_LONG';
+
+						if(!isValidLength) {
+							// Prevent further typing when the number exceeds the maximum length
+							$(this).val(phoneNumber.slice(0, phoneNumber.length - 1));
+						} else {
+							var formatter = new libphonenumber.AsYouType(regionCode);
+							var formattedNumber = formatter.input(phoneNumber);
+							$(this).val(formattedNumber);
+						}
 					});
 
 					if ( ! is_material ) {
@@ -632,7 +651,8 @@
 				textarea    = form.find( '.forminator-textarea' ),
 				select2     = form.find( '.forminator-select2' ),
 				multiselect = form.find( '.forminator-multiselect' ),
-				stripe		= form.find( '.forminator-stripe-element' )
+				stripe		= form.find( '.forminator-stripe-element' ),
+				slider		= form.find( '.forminator-slider' )
 				;
 
 			var isDefault  = ( form.attr( 'data-design' ) === 'default' ),
@@ -655,6 +675,10 @@
 
 			if ( 'function' === typeof FUI.select2 ) {
 				FUI.select2( select2.length );
+			}
+
+			if ( 'function' === typeof FUI.slider ) {
+				FUI.slider();
 			}
 
 			if ( multiselect.length ) {
@@ -1766,6 +1790,7 @@ var forminatorDateUtil = {
         return (
             d.constructor === Date   ? d :
             d.constructor === Array  ? new Date( d[0], this.month_number( d[1] ), d[2] ) :
+            jQuery.isNumeric( d )    ? new Date( 1 * d ) :
             d.constructor === Number ? new Date( d ) :
             d.constructor === String ? new Date( d ) :
             typeof d === "object"    ? new Date( d.year, this.month_number( d.month ), d.date ) :

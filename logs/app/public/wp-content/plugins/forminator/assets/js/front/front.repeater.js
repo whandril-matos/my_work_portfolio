@@ -109,7 +109,7 @@
 		const newBlock = forminatorPrepareCloningBlock( firstBlock );
 		groupField.append( newBlock );
 
-		var pattern = new RegExp('((?:calculation|number|currency|radio|select|checkbox)-\\d+)', 'g');
+		var pattern = new RegExp('((?:calculation|number|slider|currency|radio|select|checkbox)-\\d+(?:-min|-max)?)', 'g');
 		var matches;
 
 		const names = newBlock.find('[name]');
@@ -167,7 +167,7 @@
 		});
 
 		// Remove selected files for Multiple Upload fields.
-		newBlock.find( '.forminator-uploaded-files.forminator-has-files' ).html('');
+		newBlock.find( '.forminator-uploaded-files.forminator-has-files, .forminator-slide' ).html('');
 
 		// Change id and name attributes.
 		let newHtml = newBlock.html().replace( /(id=|name=|for=|data-element=|wp.editor.initialize\()"([^"]+?)(\[\]|-multiselect-default-values|-label)?"/g, '$1"$2-' + newSuffix + '$3"' );

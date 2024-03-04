@@ -822,8 +822,11 @@ function forminator_get_export_logs( $form_id ) {
  * @return mixed
  */
 function forminator_get_current_url() {
-	$url     = wp_get_referer();
-	$post_id = url_to_postid( $url );
+	if ( ! empty( $_SERVER['REQUEST_URI'] ) && false !== strpos( $_SERVER['REQUEST_URI'], 'admin-ajax.php' ) ) {
+		$post_id = url_to_postid( wp_get_referer() );
+	} else {
+		$post_id = get_the_ID();
+	}
 
 	return esc_url( get_permalink( $post_id ) );
 }

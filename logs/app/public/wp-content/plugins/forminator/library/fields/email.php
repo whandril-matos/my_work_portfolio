@@ -116,7 +116,7 @@ class Forminator_Email extends Forminator_Field {
 		$name        = $id;
 		$design      = $this->get_form_style( $settings );
 		$ariaid      = $id;
-		$id          = 'forminator-field-' . $id . '_' . Forminator_CForm_Front::$uid;
+		$id          = self::get_field_id( $id );
 		$required    = self::get_property( 'required', $field, false );
 		$ariareq     = 'false';
 		$placeholder = $this->sanitize_value( self::get_property( 'placeholder', $field ) );

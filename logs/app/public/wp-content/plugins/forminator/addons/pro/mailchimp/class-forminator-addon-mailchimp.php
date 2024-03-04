@@ -342,6 +342,10 @@ class Forminator_Addon_Mailchimp extends Forminator_Addon_Abstract {
 			$info = $this->get_api( $api_key )->get_info();
 			forminator_addon_maybe_log( __METHOD__, $info );
 
+			if ( 'Forminator_Addon_Mailchimp_Wp_Api_Exception' === get_class( $info ) ) {
+				throw new Forminator_Addon_Mailchimp_Wp_Api_Exception( $info->getMessage() );
+			}
+
 			$this->_connected_account = array(
 				'account_id'   => $info->account_id,
 				'account_name' => $info->account_name,

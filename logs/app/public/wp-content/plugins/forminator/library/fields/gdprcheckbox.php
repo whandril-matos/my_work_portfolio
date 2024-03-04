@@ -120,20 +120,12 @@ class Forminator_GdprCheckbox extends Forminator_Field {
 		$name        = $id;
 		$form_id     = isset( $settings['form_id'] ) ? $settings['form_id'] : false;
 		$description = wp_kses_post( forminator_replace_variables( self::get_property( 'gdpr_description', $field ), $form_id ) );
-		$id          = 'forminator-field-' . $id . '_' . Forminator_CForm_Front::$uid;
+		$id          = self::get_field_id( $id );
 		$label       = esc_html( self::get_property( 'field_label', $field ) );
 
 		$html .= '<div class="forminator-field">';
 
-		if ( $label ) {
-
-			$html .= sprintf(
-				'<label for="%s" class="forminator-label">%s %s</label>',
-				$id,
-				$label,
-				forminator_get_required_icon()
-			);
-		}
+		$html .= self::get_field_label( $label, $id, true );
 
 			$html .= sprintf( '<label for="%s" class="forminator-checkbox">', $id );
 

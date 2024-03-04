@@ -100,6 +100,7 @@
 
 			this.$el.find(
 				'.forminator-textarea, input.forminator-input, .forminator-checkbox, .forminator-radio, .forminator-input-file, select.forminator-select2, .forminator-multiselect input'
+				+ ', input.forminator-slider-hidden, input.forminator-slider-hidden-min, input.forminator-slider-hidden-max'
 			).each(function () {
 				$(this).on('change', function () {
 					// Give jquery sometime to apply changes

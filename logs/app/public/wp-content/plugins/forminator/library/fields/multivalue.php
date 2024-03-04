@@ -123,7 +123,6 @@ class Forminator_MultiValue extends Forminator_Field {
 		$html        = '';
 		$id          = self::get_property( 'element_id', $field );
 		$name        = $id;
-		$ariaid      = $id;
 		$id          = 'forminator-field-' . $id;
 		$uniq_id     = Forminator_CForm_Front::$uid;
 		$post_value  = self::get_post_data( $name, self::FIELD_PROPERTY_VALUE_NOT_EXIST );

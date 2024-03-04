@@ -296,6 +296,7 @@ class Forminator_CForm_Front_User_Registration extends Forminator_User {
 	 */
 	public function validate( $custom_form, $field_data_array, $is_approve = false ) {
 		$settings = $custom_form->settings;
+
 		// Field username.
 		$username = '';
 		if ( isset( $settings['registration-username-field'] ) && ! empty( $settings['registration-username-field'] ) ) {
@@ -352,6 +353,11 @@ class Forminator_CForm_Front_User_Registration extends Forminator_User {
 			}
 		}
 
+		// Check password length.
+		if ( 255 < mb_strlen( $password ) ) {
+			return esc_html__( 'User password may not be longer than 255 characters.', 'forminator' );
+		}
+
 		$new_user_data = array(
 			'user_login' => $username,
 			'user_pass'  => $password,
@@ -370,6 +376,10 @@ class Forminator_CForm_Front_User_Registration extends Forminator_User {
 		// Field website.
 		if ( isset( $settings['registration-website-field'] ) && ! empty( $settings['registration-website-field'] ) ) {
 			$new_user_data['user_url'] = $this->replace_value( $field_data_array, $settings['registration-website-field'] );
+
+			if ( 100 < mb_strlen( $new_user_data['user_url'] ) ) {
+				return esc_html__( 'User website URL may not be longer than 100 characters.', 'forminator' );
+			}
 		}
 
 		// Field user role.
@@ -394,7 +404,6 @@ class Forminator_CForm_Front_User_Registration extends Forminator_User {
 	public function process_validation( $custom_form, $field_data_array ) {
 		$user_data = $this->validate( $custom_form, $field_data_array );
 		if ( ! is_array( $user_data ) ) {
-
 			return $user_data;
 		}
 
@@ -462,6 +471,14 @@ class Forminator_CForm_Front_User_Registration extends Forminator_User {
 
 				return $data;
 			}
+
+			// Check if email is within the character limit.
+			if ( 100 < mb_strlen( $email ) ) {
+				$data['result']  = false;
+				$data['message'] = esc_html__( 'User email may not be longer than 100 characters.', 'forminator' );
+
+				return $data;
+			}
 		} else {
 			$data['result']  = false;
 			$data['message'] = esc_html__( 'The email address can not be empty.', 'forminator' );
@@ -497,6 +514,14 @@ class Forminator_CForm_Front_User_Registration extends Forminator_User {
 			if ( username_exists( $username ) ) {
 				$data['result']  = false;
 				$data['message'] = esc_html__( 'This username is already registered.', 'forminator' );
+
+				return $data;
+			}
+
+			// Check if username is greater than 60 characters.
+			if ( 60 < mb_strlen( $username ) ) {
+				$data['result']  = false;
+				$data['message'] = esc_html__( 'Username may not be longer than 60 characters.', 'forminator' );
 
 				return $data;
 			}
