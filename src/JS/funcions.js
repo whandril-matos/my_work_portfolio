@@ -36,7 +36,9 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log(rob)
     // Loop sobre o array de URLs das imagens
     image.forEach(function(url) {
-
+        const div =  document.createElement("div")
+        div.classList.add('bz')
+        
         // Cria um elemento <img>
         const img = document.createElement('img');
         // Define o atributo src com a URL da imagem
@@ -44,6 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
         img.classList.add('artWork')
         
         rob.appendChild(img)
+        
 
     });
     console.log()
