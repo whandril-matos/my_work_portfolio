@@ -46,37 +46,51 @@ section{
 }
 
 .nav{
-    position: relative;
+    text-align: center;
     background-color: rgb(255, 255, 255);
     width: 100%;
     height: 50vh;
     margin-top: 20px;
+    align-items: center;
 }
 
 .bt{
-    color: aqua;
+    color: rgb(0, 0, 0);
     background-color: rgb(255, 255, 255);
-    border: 10px solid black;
+    border: 3px solid black;
     border-radius: 10px;
-    width: 80%;
-    font-size: 30px;
-    margin: 10px 10%;
+    min-width: 240px;
+    max-width: 700px;
+    width: 70%;
+    font-size: 25px;
+    margin:  15px 10%;
+    padding: 15px;
+    box-shadow: 5px 3px 0px rgba(0, 0, 0, 0.54);
 }
 
-.bt:{
+.bt:active{
     animation: bigDow;
-    animation-duration: 3s; /* Duração da animação */
+    animation-duration: 0.2s; /* Duração da animação */
 
     
+}
+
+.infoNav{
+    text-align:left;
+    background-color: rgb(255, 255, 255);
+    margin: 5% 10%;
+}
+
+.xTwitter{
+    border-radius: 1000px;
+    width:50px;
 }
 
 
 @keyframes  bigDow{
     from{
-        transform: scale(1);
+        transform: scale(1.03);
     } to {
-        transform: scale(3);
-    }from {
         transform: scale(1);
     }
     
