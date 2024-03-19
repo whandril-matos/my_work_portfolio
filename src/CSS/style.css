@@ -1,7 +1,8 @@
 body{
     background-color: black;
-    padding-left: 3%;
-    padding-right: 3%;
+    padding-left: 1%;
+    padding-right: 1%;
+
 }
 
 header{
@@ -10,16 +11,21 @@ header{
     text-align: center;
     background-color: rgb(255, 255, 255);
     padding: 80px 5px 10px 10px;
+    border-radius: 20px 20px 0px 0px;
+    font-size: 120%;
+    font-family:'gerlFont';
+    letter-spacing: 1.5px;
 }
 
 .des{
     background-color: rgba(250, 235, 215, 0);
     text-align: center;
     line-height: 0.5;
+    font-size: 25px;
 }
 
 .logo{
-    width: 100px;
+    width: 160px;
     
 }
 
@@ -36,6 +42,7 @@ section{
     align-items: center;
     margin-top: 10px;
     padding-top: 10px;
+    
 
 }
 
@@ -52,6 +59,7 @@ section{
     height: 50vh;
     margin-top: 20px;
     align-items: center;
+    border-radius: 0px 0px 20px 20px;
 }
 
 .bt{
@@ -79,13 +87,25 @@ section{
     text-align:left;
     background-color: rgb(255, 255, 255);
     margin: 5% 10%;
+    font-size: 120%;
+    font-family:'gerlFont';
+    letter-spacing: 1.5px;
 }
 
 .xTwitter{
-    border-radius: 1000px;
+    border-radius: 500px;
     width:50px;
 }
 
+
+
+@font-face {
+    font-family: 'gerlFont';
+    src: url('/src/fonts/Galhau_Heavy.ttf') format('woff'), /* formato da fonte, ajuste conforme necessário */
+         url('/src/fonts/Galhau_Regular.ttf') format('truetype'); /* formato da fonte, ajuste conforme necessário */
+    font-weight: normal; /* ou bold, conforme necessário */
+    font-style: normal; /* ou italic, conforme necessário */
+}
 
 @keyframes  bigDow{
     from{
