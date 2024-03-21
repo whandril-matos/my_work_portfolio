@@ -26,7 +26,6 @@ header{
 
 .logo{
     width: 160px;
-    
 }
 
 
@@ -36,20 +35,19 @@ section{
     width: 30;
     display:flex;
     flex-wrap: wrap;
-    height:264vw;
-    max-height:fit-content;
+    height:285vw;
+    max-height:auto;
     flex-direction: column;
     align-items: center;
     margin-top: 10px;
     padding-top: 10px;
-    
-
 }
 
 
 .artWork{
     max-width: 40vw;
     display: block; 
+    margin: 5px 0px;
 }
 
 .nav{
@@ -67,18 +65,19 @@ section{
     background-color: rgb(255, 255, 255);
     border: 3px solid black;
     border-radius: 10px;
-    min-width: 240px;
     max-width: 700px;
     width: 70%;
     font-size: 25px;
     margin:  15px 10%;
     padding: 15px;
     box-shadow: 5px 3px 0px rgba(0, 0, 0, 0.54);
+    font-family:'gerlFont';
+    letter-spacing: 1.5px;
 }
 
 .bt:active{
     animation: bigDow;
-    animation-duration: 0.2s; /* Duração da animação */
+    animation-duration: 0.2s; 
 
     
 }
@@ -97,19 +96,24 @@ section{
     width:50px;
 }
 
+.xTwitter:active{
+    animation: bigDow;
+    animation-duration: 0.2s; 
+}
+
 
 
 @font-face {
     font-family: 'gerlFont';
-    src: url('/src/fonts/Galhau_Heavy.ttf') format('woff'), /* formato da fonte, ajuste conforme necessário */
-         url('/src/fonts/Galhau_Regular.ttf') format('truetype'); /* formato da fonte, ajuste conforme necessário */
-    font-weight: normal; /* ou bold, conforme necessário */
-    font-style: normal; /* ou italic, conforme necessário */
+    src:    url('/src/fonts/Galhau_Heavy.ttf') format('woff'), 
+            url('/src/fonts/Galhau_Regular.ttf') format('truetype'); 
+    font-weight: normal; 
+    font-style: normal; 
 }
 
 @keyframes  bigDow{
     from{
-        transform: scale(1.03);
+        transform: scale(1.029);
     } to {
         transform: scale(1);
     }
