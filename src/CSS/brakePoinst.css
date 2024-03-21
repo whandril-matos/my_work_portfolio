@@ -1,0 +1,33 @@
+@media (max-width: 500px){
+    .logo{
+        width: 50vw;
+    }
+    .des{
+        font-size: 7vw;
+        line-height: 1;
+    }
+    .section{
+        height: auto;
+        padding-bottom: 5px;
+    }
+    .artWork{
+        max-width: 80vw;
+        display: block; 
+        margin: 5px 0px;
+    }
+    .bt{
+        font-size: 7vw;
+    }
+    .infoNav{
+        font-size: 5vw;
+        text-align:left;
+        margin: 0% 3%;
+        font-family:'gerlFont';
+        letter-spacing: 1.5px;
+    }
+    .nav{
+        height: auto;
+        padding-bottom: 55px;
+    }
+}
+
