@@ -35,7 +35,7 @@ section{
     width: 30;
     display:flex;
     flex-wrap: wrap;
-    height:285vw;
+    height:280vw;
     max-height:auto;
     flex-direction: column;
     align-items: center;
@@ -93,12 +93,26 @@ section{
 
 .xTwitter{
     border-radius: 500px;
-    width:50px;
+    width:60px;
+    position:fixed;
+    top: 90%;
+    left:85%;
+    
 }
 
 .xTwitter:active{
     animation: bigDow;
     animation-duration: 0.2s; 
+}
+
+.ass{
+    background-color: brown;
+    position: fixed;
+    top: 15px;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    text-align: center;
+    align-items: center;
 }
 
 
