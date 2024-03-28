@@ -2,7 +2,7 @@ body{
     background-color: black;
     padding-left: 1%;
     padding-right: 1%;
-
+    user-select: none;
 }
 
 header{
@@ -100,22 +100,38 @@ section{
     
 }
 
+
+.ass{
+    background-color: rgb(0, 0, 0);
+    position: fixed;
+    width: auto;
+    top: 15px;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    border-radius: 10px;
+    padding: 0px 10px;
+    display:flex;
+    justify-content: space-between;
+    color: aliceblue;
+    cursor: default;
+    
+}
+
 .xTwitter:active{
     animation: bigDow;
     animation-duration: 0.2s; 
 }
 
-.ass{
-    background-color: brown;
-    position: fixed;
-    top: 15px;
-    left: 50%;
-    transform: translate(-50%, 0%);
-    text-align: center;
-    align-items: center;
+.ass p{
+    margin: 10px;
+    font-family:'gerlFont';
+    font-size: 20px;
 }
 
-
+.ass p:active{
+    animation: bigDow;
+    animation-duration: 0.2s;
+}
 
 @font-face {
     font-family: 'gerlFont';
