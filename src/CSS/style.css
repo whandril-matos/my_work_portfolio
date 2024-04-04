@@ -3,7 +3,7 @@ html {
 }
 
 body{
-    background-color: black;
+    background-color: rgb(13, 13, 13);
     padding-left: 1%;
     padding-right: 1%;
     user-select: none;
@@ -17,7 +17,7 @@ header{
     padding: 80px 5px 10px 10px;
     border-radius: 20px 20px 0px 0px;
     font-size: 120%;
-    font-family:'gerlFont';
+    font-family:'gerlFontS';
     letter-spacing: 1.5px;
 }
 
@@ -59,9 +59,9 @@ section{
     background-color: rgb(255, 255, 255);
     width: 100%;
     height: 50vh;
-    margin-top: 20px;
     align-items: center;
     border-radius: 0px 0px 20px 20px;
+    padding-top: 1px;
 }
 
 .bt{
@@ -72,10 +72,10 @@ section{
     max-width: 700px;
     width: 70%;
     font-size: 25px;
-    margin:  15px 10%;
+    margin:  15px 10px;
     padding: 15px;
     box-shadow: 5px 3px 0px rgba(0, 0, 0, 0.54);
-    font-family:'gerlFont';
+    font-family:'gerlFontG';
     letter-spacing: 1.5px;
 }
 
@@ -83,16 +83,23 @@ section{
     animation: bigDow;
     animation-duration: 0.2s; 
 
-    
 }
 
 .infoNav{
     text-align:left;
     background-color: rgb(255, 255, 255);
-    margin: 5% 10%;
-    font-size: 120%;
-    font-family:'gerlFont';
+    margin: 5% 20px;
+    font-size: 130%;
+    font-family:'gerlFontS';
     letter-spacing: 1.5px;
+}
+
+#contat{
+    font-family:'gerlFontG';
+    font-size: 170%;
+    text-align: center ;
+    padding-bottom: 20px;
+
 }
 
 .xTwitter{
@@ -102,8 +109,6 @@ section{
     bottom: 0;
     right: 0;
     overflow: hidden;
-    margin: 10px;
-
 }
 
 .ass{
@@ -130,7 +135,7 @@ section{
     color: white;
     text-decoration: none;
     margin: 10px;
-    font-family:'gerlFont';
+    font-family:'gerlFontG';
     font-size: 20px;
 }
 
@@ -140,28 +145,43 @@ section{
 }
 
 .about{
-    font-family:'gerlFont';
+    font-family:'gerlFontS';
     text-align: left;
     background-color: rgb(255, 255, 255);
     width: 100%;
-    height: 50vh;
-    margin-top: 20px;
+    height: auto;
     align-items: center;
+    padding:20px 0px;
+    margin: 10px 0px;
+}
+
+.about h1{
+    text-align: center;
+    font-family:'gerlFontG'
 }
 
 .about p{
     text-align:left;
     background-color: rgb(255, 255, 255);
     margin: 5% 10%;
-    font-size: 120%;
-    font-family:'gerlFont';
+    font-size: 140%;
+    font-family:'gerlFontS';
     letter-spacing: 1.5px;
 }
 
 @font-face {
-    font-family: 'gerlFont';
+    font-family: 'gerlFontG';
     src:    url('/src/fonts/Galhau_Heavy.ttf') format('woff'), 
             url('/src/fonts/Galhau_Regular.ttf') format('truetype'); 
+    font-weight: normal; 
+    font-style: normal; 
+}
+
+@font-face {
+    font-family: 'gerlFontS';
+    src:     
+            url('/src/fonts/Galhau_Regular.ttf') format('truetype'), 
+            url('/src/fonts/Galhau_Heavy.ttf') format('woff');
     font-weight: normal; 
     font-style: normal; 
 }
