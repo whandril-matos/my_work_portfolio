@@ -59,6 +59,7 @@ section{
     background-color: rgb(255, 255, 255);
     width: 100%;
     height: 50vh;
+    font-size: small;
     align-items: center;
     border-radius: 0px 0px 20px 20px;
     padding-top: 1px;
@@ -88,15 +89,17 @@ section{
 .infoNav{
     text-align:left;
     background-color: rgb(255, 255, 255);
-    margin: 5% 20px;
-    font-size: 130%;
-    font-family:'gerlFontS';
+    margin:5% 10%;
     letter-spacing: 1.5px;
+}
+.infoNav p{
+    font-size: 200%;
+    font-family:'gerlFontS';
 }
 
 #contat{
     font-family:'gerlFontG';
-    font-size: 170%;
+    font-size: 230%;
     text-align: center ;
     padding-bottom: 20px;
 
@@ -106,7 +109,7 @@ section{
     border-radius: 500px;
     width:60px;
     position:fixed;
-    bottom: 0;
+    bottom: 30px;
     right: 0;
     overflow: hidden;
 }
@@ -146,11 +149,11 @@ section{
 
 .about{
     font-family:'gerlFontS';
-    text-align: left;
     background-color: rgb(255, 255, 255);
     width: 100%;
     height: auto;
     align-items: center;
+    text-align: center;
     padding:20px 0px;
     margin: 10px 0px;
 }
@@ -168,6 +171,14 @@ section{
     font-family:'gerlFontS';
     letter-spacing: 1.5px;
 }
+
+#logoAbout{
+    max-width: 300px;
+    width: 40VW;
+    border-radius: 100%;
+}
+
+
 
 @font-face {
     font-family: 'gerlFontG';
