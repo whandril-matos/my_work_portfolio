@@ -12,18 +12,13 @@
     }
     .artWork{
         max-width: 80vw;
-        display: block; 
-        margin: 5px 0px;
     }
     .bt{
         font-size: 7vw;
     }
     .infoNav{
-        font-size: 5vw;
-        text-align:left;
-        margin: 0% 3%;
-        font-family:'gerlFontS';
-        letter-spacing: 1.5px;
+        font-size: 80%;
+        margin:5% 5%;
     }
     .nav{
         height: auto;
